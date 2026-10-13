@@ -60,8 +60,9 @@ class Check:
         priority = {"pass": 0, "warning": 1, "unknown": 2, "failure": 3}
         if priority[status] > priority[self.data["status"]]:
             self.data["status"] = status
+            self.data["examples"].clear()
         self.data["count"] += 1
-        if len(self.data["examples"]) < self.limit:
+        if status == self.data["status"] and len(self.data["examples"]) < self.limit:
             self.data["examples"].append(evidence)
 
 
@@ -91,6 +92,22 @@ def check_coordinates(header, index, envelope, policy, checks, examples):
     scalar = header[segyio.TraceField.SourceGroupScalar]
     raw_x, raw_y = header[segyio.TraceField.CDP_X], header[segyio.TraceField.CDP_Y]
     evidence = {"trace": index, "scalar": scalar, "raw_x": raw_x, "raw_y": raw_y}
+    status = "unknown"
+    if policy.coordinates is not None:
+        code = header[segyio.TraceField.CoordinateUnits]
+        status, reason = coordinate_units(
+            code, envelope.measurement_system, policy.coordinates["units"]
+        )
+        if status != "pass":
+            checks["coordinates.units"].add(
+                status,
+                {
+                    "trace": index,
+                    "unit_code": code,
+                    "measurement_system": envelope.measurement_system,
+                    "reason": reason,
+                },
+            )
     if scalar not in [0, 1, -1, 10, -10, 100, -100, 1000, -1000, 10000, -10000]:
         checks["coordinates.scalar"].add("failure", evidence | {"reason": "non-profile scalar"})
         checks["coordinates.bounds"].add("unknown", evidence | {"reason": "untrusted scalar"})
@@ -99,27 +116,16 @@ def check_coordinates(header, index, envelope, policy, checks, examples):
         checks["coordinates.scalar"].add(
             "warning", evidence | {"reason": "zero treated as unity by this receiving convention"}
         )
-    factor = scalar if scalar > 0 else 1 / abs(scalar) if scalar < 0 else 1
-    x, y = raw_x * factor, raw_y * factor
-    evidence |= {"scaled_x": x, "scaled_y": y}
+    if scalar < 0:
+        x, y = raw_x / abs(scalar), raw_y / abs(scalar)
+    else:
+        x, y = raw_x * (scalar or 1), raw_y * (scalar or 1)
+    evidence |= {"scaled_x": x, "scaled_y": y, "units_verified": status == "pass"}
     if len(examples) < policy.example_limit:
         examples.append(evidence)
     if policy.coordinates is None:
         return
-    code = header[segyio.TraceField.CoordinateUnits]
-    status, reason = coordinate_units(
-        code, envelope.measurement_system, policy.coordinates["units"]
-    )
     if status != "pass":
-        checks["coordinates.units"].add(
-            status,
-            {
-                "trace": index,
-                "unit_code": code,
-                "measurement_system": envelope.measurement_system,
-                "reason": reason,
-            },
-        )
         checks["coordinates.bounds"].add(
             "unknown", {"trace": index, "reason": "units do not establish comparable coordinates"}
         )

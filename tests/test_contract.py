@@ -69,3 +69,29 @@ def test_complete_policy_is_parsed(policy_data):
 def test_policy_rejects_ambiguity_and_mistakes(policy_data, change):
     with pytest.raises(ValueError):
         Policy.from_dict(policy_data | change)
+
+
+def test_empty_or_zero_sampling_envelope_is_a_failure(write_segy):
+    with pytest.raises(AuditInputError) as error:
+        inspect_envelope(write_segy(dt=0))
+    assert error.value.status == "failure"
+
+
+def test_resource_guard_refuses_full_scan(write_segy, monkeypatch):
+    from segy_accept import reader
+
+    monkeypatch.setattr(reader, "MAX_TRACES", 1)
+    with pytest.raises(AuditInputError, match="limit") as error:
+        inspect_envelope(write_segy())
+    assert error.value.status == "unknown"
+
+
+def test_grid_product_limit_prevents_large_cartesian_expansion(policy_data):
+    policy_data["grid"] = {"inlines": list(range(1024)), "crosslines": list(range(1024))}
+    with pytest.raises(ValueError, match="cells"):
+        Policy.from_dict(policy_data)
+
+
+def test_revision_one_policy_sampling_uses_positive_signed_words(policy_data):
+    with pytest.raises(ValueError):
+        Policy.from_dict(policy_data | {"sample_interval_us": 40000})

@@ -137,3 +137,48 @@ def test_policy_changes_are_visible_in_provenance(write_segy, policy_data):
     changed = run(path, policy_data | {"sample_interval_us": 1000})
     assert changed["status"] == "rejected"
     assert first["policy"]["sha256"] != changed["policy"]["sha256"]
+
+
+def test_negative_scalar_preserves_inclusive_decimal_boundary(write_segy, policy_data):
+    path = write_segy(traces=[{"x": 35, "y": 0, "scalar": -100, "units": 3}])
+    policy_data["coordinates"] = {
+        "units": "decimal_degrees",
+        "reference": "declared geographic basis",
+        "bounds": [0, 0.35, 0, 0],
+    }
+    policy_data["grid"] = {"inlines": [10], "crosslines": [20]}
+    assert run(path, policy_data)["status"] == "accepted"
+
+
+def test_unit_check_runs_even_when_scalar_is_invalid(write_segy, policy_data):
+    path = write_segy(traces=[{"scalar": 3, "units": 0}])
+    result = run(path, policy_data)
+    assert finding(result, "coordinates.units")["status"] == "unknown"
+
+
+def test_bounded_evidence_keeps_the_highest_severity(write_segy, policy_data):
+    path = write_segy(traces=[{"units": 0}, {"units": 2}])
+    result = run(path, policy_data | {"example_limit": 1})
+    check = finding(result, "coordinates.units")
+    assert check["status"] == "failure"
+    assert check["count"] == 2
+    assert check["examples"][0]["unit_code"] == 2
+
+
+def test_oversized_input_has_no_fingerprint_or_acceptance(write_segy, policy_data, monkeypatch):
+    from segy_accept import audit as module
+    from segy_accept import reader
+
+    monkeypatch.setattr(module, "MAX_BYTES", 1)
+    monkeypatch.setattr(reader, "MAX_BYTES", 1)
+    result = run(write_segy(), policy_data)
+    assert result["status"] == "incomplete"
+    assert result["input"]["sha256"] is None
+    assert result["scan"]["traces_inspected"] == 0
+
+
+def test_high_bit_sampling_words_are_not_silently_accepted(write_segy, policy_data):
+    path = write_segy(ns=40000, dt=40000)
+    result = run(path, policy_data)
+    assert result["status"] == "incomplete"
+    assert finding(result, "format.profile")["status"] == "failure"

@@ -6,6 +6,15 @@ from dataclasses import dataclass
 MAX_CELLS = 1_000_000
 
 
+def finite_number(value):
+    if type(value) not in [int, float]:
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:
+        return False
+
+
 def integer(value, label, minimum=1, maximum=65535):
     if type(value) is not int or not minimum <= value <= maximum:
         raise ValueError(f"{label} must be an integer between {minimum} and {maximum}")
@@ -45,7 +54,7 @@ class Policy:
                 raise ValueError(f"{label} must be a nonempty string")
         for label in ["sample_interval_us", "samples_per_trace"]:
             if label in data:
-                integer(data[label], label)
+                integer(data[label], label, maximum=32767)
         coordinates = data.get("coordinates")
         if coordinates is not None:
             required_coords = {"units", "reference", "bounds"}
@@ -63,7 +72,7 @@ class Policy:
             if (
                 not isinstance(bounds, list)
                 or len(bounds) != 4
-                or not all(type(v) in [int, float] and math.isfinite(v) for v in bounds)
+                or not all(finite_number(v) for v in bounds)
             ):
                 raise ValueError("bounds must be four finite numbers: xmin,xmax,ymin,ymax")
             if bounds[0] > bounds[1] or bounds[2] > bounds[3]:

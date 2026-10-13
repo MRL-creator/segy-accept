@@ -14,6 +14,8 @@ passing the implemented rules only, not full standards compliance or scientific 
 - SEG-Y revision 1.0 (revision word 0x0100), big endian, format code 5,
   fixed-length traces, no extended textual headers. Standard CDP X/Y and
   inline/crossline fields only; header and policy checks, not amplitude QC.
+  Sampling words must be positive signed 16-bit integers (1-32767), following
+  revision-1 section 3.3; unsigned vendor extensions are outside the profile.
 - Use released segyio 1.9.14 read-only, ignoring automatic geometry inference.
   Independent envelope inspection detects narrow-profile size errors before parsing.
 - Policy: sampling expectations, explicit coordinate units/reference/bounds,

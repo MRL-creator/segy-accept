@@ -47,8 +47,11 @@ def inspect_envelope(path):
             raise AuditInputError(
                 f"unsupported profile: requires {meaning}; byte {offset + 1} is {word(offset)}"
             )
-    ns, dt = word(3220), word(3216)
-    if not ns or not dt:
+    # Revision 1 section 3.3 defines two's-complement header integers.
+    # Some readers accept unsigned extensions; this receiving profile does not.
+    ns = struct.unpack_from(">h", header, 3220)[0]
+    dt = struct.unpack_from(">h", header, 3216)[0]
+    if ns <= 0 or dt <= 0:
         raise AuditInputError("binary sample count and interval must be positive", "failure")
     records, remainder = divmod(size - 3600, 240 + ns * 4)
     if remainder:
