@@ -1,0 +1,72 @@
+# SEG-Y acceptance auditor: first usable version
+
+## Objective and authorization
+Build the flagship selected from the 14 October 2026 career report. The user
+reviewed that report, then asked to choose a doable project and start it.
+This file records the report's narrow first-release contract and routine
+implementation choices. No new approval gate is needed to begin that authorized work.
+
+A geoscience developer should be able to explain why a local seismic file does
+or does not meet a receiving workflow's declared assumptions. Acceptance means
+passing the implemented rules only, not full standards compliance or scientific validity.
+
+## Supported input and boundaries
+- SEG-Y revision 1.0 (revision word 0x0100), big endian, format code 5,
+  fixed-length traces, no extended textual headers. Standard CDP X/Y and
+  inline/crossline fields only; header and policy checks, not amplitude QC.
+- Use released segyio 1.9.14 read-only, ignoring automatic geometry inference.
+  Independent envelope inspection detects narrow-profile size errors before parsing.
+- Policy: sampling expectations, explicit coordinate units/reference/bounds,
+  optional Cartesian post-stack grid. No CRS guessing, repair, or reprojection.
+- Missing policy dimensions produce unknown findings; they never silently pass.
+- All traces are inspected. No sampled audit, remote downloads, dashboard,
+  arbitrary header offsets, variable-length records, or revision-2 support.
+- Source file SHA-256 and policy SHA-256, policy/schema/tool/reader versions,
+  trace counts, examples, remedies, and scan completeness accompany each result.
+- Bounded examples; geometry membership uses O(unique cells) memory.
+  A 2 GiB file / one-million-trace / one-million-expected-cell guard bounds the initial release;
+  resource limits give incomplete results, not partial acceptance.
+
+## Contract and success criteria
+`segy-accept audit INPUT --policy POLICY --out OUTPUT_DIRECTORY`
+creates deterministic `audit.json` and self-contained `audit.html`.
+Exit codes: 0 accepted, 1 rejected by a completed audit, 2 incomplete/unknown,
+3 invalid invocation, policy, or output error. Findings use pass/warning/failure/unknown.
+Rejected takes precedence over unknown only for a complete audit. Incomplete
+input remains incomplete even if a detected structural defect is a failure.
+No overwriting reports by default; `--overwrite` permits replacing only report
+files after checking neither target aliases the source or policy.
+
+Generated fixtures include clean, contradictory sampling, duplicate/missing cells,
+coordinate scaling/unit/bounds cases, and unreadable/unsupported inputs. An independent
+stdlib fixture writer supplies known header bytes; integration tests use real segyio.
+Tests establish outcomes, input immutability, deterministic reports, bounded examples,
+safe HTML escaping, and honest handling of unsupported/incomplete input.
+
+## Stack, structure, style, and commands
+Python, segyio, pytest; stdlib JSON/HTML and hashing. No server or network required at runtime.
+`src/segy_accept/`: policy, envelope inspection, audit checks, reports, CLI, generated fixtures.
+`tests/`: independent byte-level fixtures and behavior/integration tests.
+`examples/`: small generated corpus, example policy, expected results, and report.
+`docs/`: rule catalogue, decisions, validation notes and sources.
+
+Use descriptive snake_case names, small functions, dataclasses for the policy,
+and explicit statuses, e.g. `finding["status"] = "unknown"`.
+
+Setup: `python -m pip install -e ".[dev]"`
+Tests: `python -m pytest --cov=segy_accept --cov-report=term-missing`
+Lint: `python -m ruff check .`
+Format: `python -m ruff format --check .`
+Build: `python -m build`
+Demo: `python -m segy_accept demo demo-output`
+
+## Build order
+1. Policy/envelope contract and independent fixtures; fail-first tests.
+2. Sampling/coordinate/geometry rules; real-parser tests and incomplete cases.
+3. Reports/CLI/demo, end-to-end tests, clean-wheel install and documented limitations.
+
+## Always / ask first / never
+Always validate policy and file bounds, preserve source bytes, run relevant tests,
+and explain partial knowledge. Ask before field-data redistribution, external publication,
+or scope expansion. Never commit credentials, weaken failing checks, or imply full SEG-Y compliance.
+No blocking product questions remain for this local first version.
