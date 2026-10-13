@@ -7,6 +7,7 @@ name = "segy-accept"
 version = "0.1.0"
 description = "Explain whether a narrow SEG-Y dataset meets a declared receiving policy"
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.10"
 dependencies = ["segyio==1.9.14"]
 

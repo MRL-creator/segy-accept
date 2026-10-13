@@ -1,0 +1,3 @@
+include SPEC.md CONSTRAINTS.md
+recursive-include docs *.md *.png
+recursive-include examples *.json *.html *.sgy
