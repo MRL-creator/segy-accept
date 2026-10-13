@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rejected - SEG-Y acceptance - readable-broken.sgy</title>
+<style>
+:root {color-scheme:light; --ink:#18343c; --muted:#526970; --teal:#116c69; --line:#ccdcda; --paper:#fff;}
+* {box-sizing:border-box} body {margin:0;background:#eef3f1;color:var(--ink);font:16px/1.6 system-ui,sans-serif}
+a {color:var(--teal);text-underline-offset:3px} a:focus-visible,summary:focus-visible {outline:3px solid #9b5a25;outline-offset:4px}
+main {max-width:1100px;margin:40px auto;background:var(--paper);padding:42px 48px;border-top:6px solid var(--teal)}
+.eyebrow {font-size:12px;letter-spacing:2px;font-weight:750;color:var(--teal)}
+h1 {font:clamp(30px,4vw,46px)/1.14 Georgia,serif;margin:14px 0} h2 {font:28px/1.3 Georgia,serif;margin:34px 0 16px}
+h3 {font-size:18px;line-height:1.4;margin:0} p {margin:10px 0} .muted,small {color:var(--muted)}
+small {display:block;font-weight:400;margin-top:3px} code {font-size:13px;overflow-wrap:anywhere}
+.hero {display:flex;gap:24px;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:24px}
+.badge {display:inline-block;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:700;text-transform:uppercase;white-space:nowrap}
+.accepted,.pass {background:#dceee7;color:#18503b} .rejected,.failure {background:#f7ded6;color:#792c1d}
+.incomplete,.unknown {background:#e4e9ed;color:#334c60} .warning {background:#fbebce;color:#755014}
+.metrics {display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}
+.metric {background:#f1f6f4;padding:14px 18px;border-left:3px solid var(--teal)} .metric strong {display:block;font-size:28px;line-height:1.2}
+.notice {background:#faf3e8;padding:14px 18px;border-left:3px solid #9b5a25;margin:22px 0}
+table {width:100%;border-collapse:collapse;font-size:14px} caption {text-align:left;color:var(--muted);padding-bottom:12px}
+th,td {text-align:left;padding:14px 12px;border-bottom:1px solid var(--line);vertical-align:top} thead {background:#eef5f2}
+.finding {padding:22px 0;border-bottom:1px solid var(--line)} .section-head {display:flex;gap:16px;align-items:flex-start;justify-content:space-between}
+pre {white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f6f5;padding:18px;font:13px/1.5 ui-monospace,monospace}
+summary {cursor:pointer;font-weight:650} footer {margin-top:32px;color:var(--muted);font-size:13px}
+@media(max-width:680px) {main {margin:0;padding:24px 18px} .hero {display:block} .metrics {grid-template-columns:repeat(2,1fr)} th,td {padding:10px 6px} .section-head {display:block}}
+@media print {body {background:white} main {margin:0;padding:20px;border:0} details {break-inside:avoid} .finding {break-inside:avoid}}
+</style></head><body><main>
+<header><div class="eyebrow">SEG-Y ACCEPT / DATASET REVIEW</div><div class="hero"><div>
+<h1>SEG-Y acceptance report</h1><p class="muted">readable-broken.sgy / policy: synthetic-poststack</p></div>
+<span class="badge rejected">rejected</span></div></header>
+<div class="metrics"><div class="metric"><strong>5</strong>Pass rules</div><div class="metric"><strong>0</strong>Warning rules</div><div class="metric"><strong>2</strong>Failure rules</div><div class="metric"><strong>0</strong>Unknown rules</div></div>
+<p><strong>Scan:</strong> 4 / 4 trace headers inspected.
+Complete: True. Mode: full header scan.</p>
+<div class="notice"><strong>Interpretation limit.</strong> Standard revision-1 big-endian fixed-length IEEE headers, no extended headers; not full standards or scientific validation.
+Unknown findings prevent acceptance. A completed rejection may also contain unknown findings.</div>
+<h2>Decision by rule</h2><table><caption>Counts are non-pass events, not necessarily distinct traces. Evidence examples are capped.</caption>
+<thead><tr><th scope="col">Check</th><th scope="col">Status</th><th scope="col">Events</th></tr></thead><tbody><tr><th scope="row"><a href="#format.profile">Supported envelope and complete header scan</a><small>format.profile</small></th><td><span class="badge pass">pass</span></td><td>0</td></tr><tr><th scope="row"><a href="#sampling.consistency">Trace sampling agrees with the binary header</a><small>sampling.consistency</small></th><td><span class="badge failure">failure</span></td><td>1</td></tr><tr><th scope="row"><a href="#sampling.policy">Binary sampling agrees with declared workflow expectations</a><small>sampling.policy</small></th><td><span class="badge pass">pass</span></td><td>0</td></tr><tr><th scope="row"><a href="#coordinates.units">CDP coordinate units agree with the receiving policy</a><small>coordinates.units</small></th><td><span class="badge pass">pass</span></td><td>0</td></tr><tr><th scope="row"><a href="#coordinates.scalar">Coordinate scaling is explicit and interpretable</a><small>coordinates.scalar</small></th><td><span class="badge pass">pass</span></td><td>0</td></tr><tr><th scope="row"><a href="#coordinates.bounds">Scaled CDP X/Y falls inside the declared bounds</a><small>coordinates.bounds</small></th><td><span class="badge pass">pass</span></td><td>0</td></tr><tr><th scope="row"><a href="#geometry.grid">One trace per declared Cartesian post-stack cell</a><small>geometry.grid</small></th><td><span class="badge failure">failure</span></td><td>2</td></tr></tbody></table>
+<h2>Evidence and next steps</h2><section class="finding" id="format.profile"><div class="section-head"><h3>Supported envelope and complete header scan</h3><span class="badge pass">pass</span></div><p><code>format.profile</code> / 0 reported events</p><p>No contradiction detected by this implemented rule.</p></section><section class="finding" id="sampling.consistency"><div class="section-head"><h3>Trace sampling agrees with the binary header</h3><span class="badge failure">failure</span></div><p><code>sampling.consistency</code> / 1 reported events</p><p>Confirm sample count/interval with the producer; correct metadata or re-export outside this tool.</p><details open><summary>Evidence examples (bounded)</summary><pre>[
+  {
+    &quot;expected_interval_us&quot;: 2000,
+    &quot;expected_samples&quot;: 8,
+    &quot;interval_us&quot;: 4000,
+    &quot;samples&quot;: 7,
+    &quot;trace&quot;: 2
+  }
+]
+</pre></details></section><section class="finding" id="sampling.policy"><div class="section-head"><h3>Binary sampling agrees with declared workflow expectations</h3><span class="badge pass">pass</span></div><p><code>sampling.policy</code> / 0 reported events</p><p>No contradiction detected by this implemented rule.</p></section><section class="finding" id="coordinates.units"><div class="section-head"><h3>CDP coordinate units agree with the receiving policy</h3><span class="badge pass">pass</span></div><p><code>coordinates.units</code> / 0 reported events</p><p>No contradiction detected by this implemented rule.</p></section><section class="finding" id="coordinates.scalar"><div class="section-head"><h3>Coordinate scaling is explicit and interpretable</h3><span class="badge pass">pass</span></div><p><code>coordinates.scalar</code> / 0 reported events</p><p>No contradiction detected by this implemented rule.</p></section><section class="finding" id="coordinates.bounds"><div class="section-head"><h3>Scaled CDP X/Y falls inside the declared bounds</h3><span class="badge pass">pass</span></div><p><code>coordinates.bounds</code> / 0 reported events</p><p>No contradiction detected by this implemented rule.</p></section><section class="finding" id="geometry.grid"><div class="section-head"><h3>One trace per declared Cartesian post-stack cell</h3><span class="badge failure">failure</span></div><p><code>geometry.grid</code> / 2 reported events</p><p>Confirm the post-stack grid policy; review duplicates, unexpected cells and missing cells before import.</p><details open><summary>Evidence examples (bounded)</summary><pre>[
+  {
+    &quot;crossline&quot;: 20,
+    &quot;inline&quot;: 10,
+    &quot;kind&quot;: &quot;duplicate&quot;,
+    &quot;trace&quot;: 2
+  },
+  {
+    &quot;crossline&quot;: 21,
+    &quot;inline&quot;: 10,
+    &quot;kind&quot;: &quot;missing&quot;
+  }
+]
+</pre></details></section>
+<h2>Coordinate arithmetic examples</h2><p class="muted">Raw CDP X/Y and scalar arithmetic; unit compatibility is assessed separately. No CRS is inferred.</p>
+<pre>[
+  {
+    &quot;raw_x&quot;: 10000,
+    &quot;raw_y&quot;: 20000,
+    &quot;scalar&quot;: -10,
+    &quot;scaled_x&quot;: 1000.0,
+    &quot;scaled_y&quot;: 2000.0,
+    &quot;trace&quot;: 1,
+    &quot;units_verified&quot;: true
+  },
+  {
+    &quot;raw_x&quot;: 10000,
+    &quot;raw_y&quot;: 20100,
+    &quot;scalar&quot;: -10,
+    &quot;scaled_x&quot;: 1000.0,
+    &quot;scaled_y&quot;: 2010.0,
+    &quot;trace&quot;: 2,
+    &quot;units_verified&quot;: true
+  },
+  {
+    &quot;raw_x&quot;: 10100,
+    &quot;raw_y&quot;: 20000,
+    &quot;scalar&quot;: -10,
+    &quot;scaled_x&quot;: 1010.0,
+    &quot;scaled_y&quot;: 2000.0,
+    &quot;trace&quot;: 3,
+    &quot;units_verified&quot;: true
+  },
+  {
+    &quot;raw_x&quot;: 10100,
+    &quot;raw_y&quot;: 20100,
+    &quot;scalar&quot;: -10,
+    &quot;scaled_x&quot;: 1010.0,
+    &quot;scaled_y&quot;: 2010.0,
+    &quot;trace&quot;: 4,
+    &quot;units_verified&quot;: true
+  }
+]
+</pre>
+<h2>Reproduction record</h2><p>Input SHA-256 identifies file bytes. Policy SHA-256 identifies the canonical, default-expanded JSON definition below.</p>
+<details><summary>Input, policy, tool versions, and scan scope</summary><pre>{
+  &quot;input&quot;: {
+    &quot;name&quot;: &quot;readable-broken.sgy&quot;,
+    &quot;sha256&quot;: &quot;eef273780ac6b7c3a117fee92a16c037f99f4da1f762e96cece8ce274fc61a95&quot;,
+    &quot;size_bytes&quot;: 4688
+  },
+  &quot;policy&quot;: {
+    &quot;definition&quot;: {
+      &quot;coordinates&quot;: {
+        &quot;bounds&quot;: [
+          900,
+          1100,
+          1900,
+          2100
+        ],
+        &quot;reference&quot;: &quot;Synthetic local grid, not a real CRS&quot;,
+        &quot;units&quot;: &quot;metres&quot;
+      },
+      &quot;example_limit&quot;: 5,
+      &quot;grid&quot;: {
+        &quot;crosslines&quot;: [
+          20,
+          21
+        ],
+        &quot;inlines&quot;: [
+          10,
+          11
+        ]
+      },
+      &quot;name&quot;: &quot;synthetic-poststack&quot;,
+      &quot;sample_interval_us&quot;: 2000,
+      &quot;samples_per_trace&quot;: 8,
+      &quot;schema_version&quot;: 1,
+      &quot;version&quot;: &quot;1&quot;
+    },
+    &quot;sha256&quot;: &quot;eec49e09c30acf65d3d6af86e17380115fe8e3b3169f3b703a1e6e2e59e2d373&quot;
+  },
+  &quot;scan&quot;: {
+    &quot;complete&quot;: true,
+    &quot;mode&quot;: &quot;full&quot;,
+    &quot;traces_expected&quot;: 4,
+    &quot;traces_inspected&quot;: 4
+  },
+  &quot;tool&quot;: {
+    &quot;name&quot;: &quot;segy-accept&quot;,
+    &quot;segyio&quot;: &quot;1.9.14&quot;,
+    &quot;version&quot;: &quot;0.1.0&quot;
+  }
+}
+</pre></details>
+<footer>segy-accept 0.1.0 / read-only audit / generated without remote assets or scripts</footer>
+</main></body></html>

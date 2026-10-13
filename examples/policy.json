@@ -1,0 +1,27 @@
+{
+  "coordinates": {
+    "bounds": [
+      900,
+      1100,
+      1900,
+      2100
+    ],
+    "reference": "Synthetic local grid, not a real CRS",
+    "units": "metres"
+  },
+  "grid": {
+    "crosslines": [
+      20,
+      21
+    ],
+    "inlines": [
+      10,
+      11
+    ]
+  },
+  "name": "synthetic-poststack",
+  "sample_interval_us": 2000,
+  "samples_per_trace": 8,
+  "schema_version": 1,
+  "version": "1"
+}

@@ -1,0 +1,57 @@
+{
+  "cases": [
+    {
+      "expected_findings": {
+        "geometry.grid": "pass"
+      },
+      "expected_status": "accepted",
+      "file": "clean.sgy"
+    },
+    {
+      "expected_findings": {
+        "geometry.grid": "failure",
+        "sampling.consistency": "failure"
+      },
+      "expected_status": "rejected",
+      "file": "readable-broken.sgy"
+    },
+    {
+      "expected_findings": {
+        "coordinates.bounds": "failure"
+      },
+      "expected_status": "rejected",
+      "file": "outside-bounds.sgy"
+    },
+    {
+      "expected_findings": {
+        "coordinates.units": "unknown"
+      },
+      "expected_status": "incomplete",
+      "file": "unknown-units.sgy"
+    },
+    {
+      "expected_findings": {
+        "geometry.grid": "failure"
+      },
+      "expected_status": "rejected",
+      "file": "missing-cell.sgy"
+    },
+    {
+      "expected_findings": {
+        "format.profile": "failure"
+      },
+      "expected_status": "incomplete",
+      "file": "truncated.sgy"
+    },
+    {
+      "expected_findings": {
+        "format.profile": "unknown"
+      },
+      "expected_status": "incomplete",
+      "file": "unsupported-revision.sgy"
+    }
+  ],
+  "fixture_license": "MIT, see project LICENSE",
+  "policy": "policy.json",
+  "synthetic": true
+}
