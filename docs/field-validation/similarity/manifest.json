@@ -1,0 +1,58 @@
+{
+  "cases": [
+    {
+      "actual": "rejected",
+      "case": "filename-grid",
+      "expected": "rejected"
+    },
+    {
+      "actual": "accepted",
+      "case": "observed-rectangle",
+      "expected": "accepted"
+    },
+    {
+      "actual": "rejected",
+      "case": "wrong-sampling",
+      "expected": "rejected"
+    },
+    {
+      "actual": "incomplete",
+      "case": "undeclared-grid",
+      "expected": "incomplete"
+    }
+  ],
+  "license_as_stated": "CC-BY-SA; version not specified in the source README",
+  "license_source": "https://github.com/equinor/segyio-notebooks/blob/c93e02027ea31d699b65be611f2747cc78cc967e/README.md",
+  "limits": "Selected processed exports only; no EPSG verification, amplitude QC or scientific calibration.",
+  "oracle": {
+    "coordinate_unit_code": 1,
+    "crossline_range": [
+      475,
+      620
+    ],
+    "inline_range": [
+      230,
+      420
+    ],
+    "measurement_system": 1,
+    "sample_interval_us": 4000,
+    "samples_per_trace": 51,
+    "scalar": -10,
+    "scaled_xy_extents": [
+      609985.4,
+      613741.6,
+      6076927.2,
+      6081776.5
+    ],
+    "traces": 27886
+  },
+  "raw_data_redistributed": false,
+  "retrieved_at_utc": null,
+  "sha256": "dc6da7bf5c47cf5b8fcc7e321cdb989b91e95aa3ae7aea2bf1706a21c71ab8b2",
+  "size_bytes": 12384984,
+  "source_file": "F3_Similarity_FEF_subvolume_IL230-430_XL475-675_T1600-1800.sgy",
+  "source_reviewed": "2026-10-14",
+  "source_revision": "c93e02027ea31d699b65be611f2747cc78cc967e",
+  "source_url": "https://raw.githubusercontent.com/equinor/segyio-notebooks/c93e02027ea31d699b65be611f2747cc78cc967e/data/basic/F3_Similarity_FEF_subvolume_IL230-430_XL475-675_T1600-1800.sgy",
+  "validated_at_utc": "2026-10-14T10:48:14.300377+00:00"
+}

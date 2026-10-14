@@ -1,6 +1,6 @@
 # Security
 
-Only the latest v0.1 preview is maintained. This is an offline local-file tool;
+Fixes target the latest v1 release; v0.1 is an archived preview. This is an offline local-file tool;
 it is not a sandbox for hostile files, a hosted upload service, or a SEG-Y
 conformance certification. Its native segyio dependency has its own security
 boundary. Use stable, trusted copies of inputs and a current Python environment.

@@ -1,0 +1,121 @@
+{
+  "coordinate_examples": [],
+  "findings": [
+    {
+      "count": 1,
+      "examples": [
+        {
+          "reason": "unsupported profile: requires revision 1.0 / big endian; byte 3501 is 0"
+        }
+      ],
+      "next_step": "Use the documented revision-1 fixed-length IEEE profile; inspect/export other layouts separately.",
+      "rule_id": "format.profile",
+      "status": "unknown",
+      "title": "Supported envelope and complete header scan"
+    },
+    {
+      "count": 1,
+      "examples": [
+        {
+          "reason": "scan could not be completed"
+        }
+      ],
+      "next_step": "Confirm sample count/interval with the producer; correct metadata or re-export outside this tool.",
+      "rule_id": "sampling.consistency",
+      "status": "unknown",
+      "title": "Trace sampling agrees with the binary header"
+    },
+    {
+      "count": 1,
+      "examples": [
+        {
+          "reason": "scan could not be completed"
+        }
+      ],
+      "next_step": "Supply both sampling expectations and confirm that they describe the intended workflow.",
+      "rule_id": "sampling.policy",
+      "status": "unknown",
+      "title": "Binary sampling agrees with declared workflow expectations"
+    },
+    {
+      "count": 1,
+      "examples": [
+        {
+          "reason": "workflow expectations not fully declared"
+        }
+      ],
+      "next_step": "Confirm coordinate units and binary measurement system with the producer; do not guess a CRS.",
+      "rule_id": "coordinates.units",
+      "status": "unknown",
+      "title": "CDP coordinate units agree with the receiving policy"
+    },
+    {
+      "count": 1,
+      "examples": [
+        {
+          "reason": "scan could not be completed"
+        }
+      ],
+      "next_step": "Confirm the scalar; positive multiplies, negative divides. Zero is an explicit unity fallback warning.",
+      "rule_id": "coordinates.scalar",
+      "status": "unknown",
+      "title": "Coordinate scaling is explicit and interpretable"
+    },
+    {
+      "count": 1,
+      "examples": [
+        {
+          "reason": "workflow expectations not fully declared"
+        }
+      ],
+      "next_step": "Check CDP fields, scalar, units and declared reference/bounds. No reprojection or repair is performed.",
+      "rule_id": "coordinates.bounds",
+      "status": "unknown",
+      "title": "Scaled CDP X/Y falls inside the declared bounds"
+    },
+    {
+      "count": 1,
+      "examples": [
+        {
+          "reason": "workflow expectations not fully declared"
+        }
+      ],
+      "next_step": "Confirm the post-stack grid policy; review duplicates, unexpected cells and missing cells before import.",
+      "rule_id": "geometry.grid",
+      "status": "unknown",
+      "title": "One trace per declared Cartesian post-stack cell"
+    }
+  ],
+  "input": {
+    "name": "3X_75_PR.SGY",
+    "sha256": "4a8490434e6e09cb0c2389328d42f7ad710d1fbc96a83be2c529ceec321d9722",
+    "size_bytes": 5168048
+  },
+  "policy": {
+    "definition": {
+      "coordinates": null,
+      "example_limit": 5,
+      "grid": null,
+      "name": "NPRA-legacy-inspection",
+      "sample_interval_us": 8000,
+      "samples_per_trace": 751,
+      "schema_version": 1,
+      "version": "1"
+    },
+    "sha256": "9b048844b850cef0e0d7a241813548bde2afd313fa85e4c1d0e4b2f1d4b05f57"
+  },
+  "scan": {
+    "complete": false,
+    "mode": "full",
+    "traces_expected": null,
+    "traces_inspected": 0
+  },
+  "schema_version": 1,
+  "scope": "Standard revision-1 big-endian fixed-length IEEE headers, no extended headers; not full standards or scientific validation.",
+  "status": "incomplete",
+  "tool": {
+    "name": "segy-accept",
+    "segyio": "1.9.14",
+    "version": "1.0.0"
+  }
+}

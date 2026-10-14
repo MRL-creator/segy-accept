@@ -98,3 +98,15 @@ The F3 raw subvolume stays excluded from Git and distributions; publish the orac
 attributed source register, fingerprints, policy definitions, and audit results.
 The user has no practitioner reviewer available. Prepare a review packet and retain
 that limitation; automated review must never be presented as practitioner endorsement.
+
+## Stable release scope (14 October 2026)
+The user agreed to finish a stable version within the documented scope without
+making another person's involvement a prerequisite. Verify two additional small
+field examples, freeze the CLI/schema-1 consumer contract, and publish v1.0.0 only
+after the existing quality gates and expanded field workflow pass. Practitioner
+feedback is optional external evidence, not a release gate. Retain all technical
+limits and preserve the archived v0.1.0 preview and its evidence.
+
+An omitted or null sampling expectation means undeclared; default-expanded report
+policies must be accepted as replay input. Add `--version` for installed-tool
+identification. No SEG-Y layout or scientific-validation scope is expanded.

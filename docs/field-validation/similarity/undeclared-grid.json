@@ -1,0 +1,159 @@
+{
+  "binary_header": {
+    "measurement_system": 1,
+    "sample_interval_us": 4000,
+    "samples_per_trace": 51,
+    "size_bytes": 12384984,
+    "trace_count": 27886
+  },
+  "coordinate_examples": [
+    {
+      "raw_x": 6101180,
+      "raw_y": 60769272,
+      "scalar": -10,
+      "scaled_x": 610118.0,
+      "scaled_y": 6076927.2,
+      "trace": 1,
+      "units_verified": true
+    },
+    {
+      "raw_x": 6101430,
+      "raw_y": 60769279,
+      "scalar": -10,
+      "scaled_x": 610143.0,
+      "scaled_y": 6076927.9,
+      "trace": 2,
+      "units_verified": true
+    },
+    {
+      "raw_x": 6101680,
+      "raw_y": 60769286,
+      "scalar": -10,
+      "scaled_x": 610168.0,
+      "scaled_y": 6076928.6,
+      "trace": 3,
+      "units_verified": true
+    },
+    {
+      "raw_x": 6101930,
+      "raw_y": 60769293,
+      "scalar": -10,
+      "scaled_x": 610193.0,
+      "scaled_y": 6076929.3,
+      "trace": 4,
+      "units_verified": true
+    },
+    {
+      "raw_x": 6102180,
+      "raw_y": 60769300,
+      "scalar": -10,
+      "scaled_x": 610218.0,
+      "scaled_y": 6076930.0,
+      "trace": 5,
+      "units_verified": true
+    }
+  ],
+  "findings": [
+    {
+      "count": 0,
+      "examples": [],
+      "next_step": "Use the documented revision-1 fixed-length IEEE profile; inspect/export other layouts separately.",
+      "rule_id": "format.profile",
+      "status": "pass",
+      "title": "Supported envelope and complete header scan"
+    },
+    {
+      "count": 0,
+      "examples": [],
+      "next_step": "Confirm sample count/interval with the producer; correct metadata or re-export outside this tool.",
+      "rule_id": "sampling.consistency",
+      "status": "pass",
+      "title": "Trace sampling agrees with the binary header"
+    },
+    {
+      "count": 0,
+      "examples": [],
+      "next_step": "Supply both sampling expectations and confirm that they describe the intended workflow.",
+      "rule_id": "sampling.policy",
+      "status": "pass",
+      "title": "Binary sampling agrees with declared workflow expectations"
+    },
+    {
+      "count": 0,
+      "examples": [],
+      "next_step": "Confirm coordinate units and binary measurement system with the producer; do not guess a CRS.",
+      "rule_id": "coordinates.units",
+      "status": "pass",
+      "title": "CDP coordinate units agree with the receiving policy"
+    },
+    {
+      "count": 0,
+      "examples": [],
+      "next_step": "Confirm the scalar; positive multiplies, negative divides. Zero is an explicit unity fallback warning.",
+      "rule_id": "coordinates.scalar",
+      "status": "pass",
+      "title": "Coordinate scaling is explicit and interpretable"
+    },
+    {
+      "count": 0,
+      "examples": [],
+      "next_step": "Check CDP fields, scalar, units and declared reference/bounds. No reprojection or repair is performed.",
+      "rule_id": "coordinates.bounds",
+      "status": "pass",
+      "title": "Scaled CDP X/Y falls inside the declared bounds"
+    },
+    {
+      "count": 1,
+      "examples": [
+        {
+          "reason": "workflow expectations not fully declared"
+        }
+      ],
+      "next_step": "Confirm the post-stack grid policy; review duplicates, unexpected cells and missing cells before import.",
+      "rule_id": "geometry.grid",
+      "status": "unknown",
+      "title": "One trace per declared Cartesian post-stack cell"
+    }
+  ],
+  "input": {
+    "name": "F3_Similarity_FEF_subvolume_IL230-430_XL475-675_T1600-1800.sgy",
+    "sha256": "dc6da7bf5c47cf5b8fcc7e321cdb989b91e95aa3ae7aea2bf1706a21c71ab8b2",
+    "size_bytes": 12384984
+  },
+  "policy": {
+    "definition": {
+      "coordinates": {
+        "bounds": [
+          609000,
+          616000,
+          6076000,
+          6083000
+        ],
+        "reference": "Unlocated XY from source textual header; no EPSG inferred",
+        "units": "metres"
+      },
+      "example_limit": 5,
+      "grid": null,
+      "name": "F3-subvolume-receiving-workflow",
+      "sample_interval_us": 4000,
+      "samples_per_trace": 51,
+      "schema_version": 1,
+      "version": "1"
+    },
+    "sha256": "ce652921d7cddc518245267f8323583c6d5f1e0af89773fc730f5d613f7c9fc1"
+  },
+  "scan": {
+    "complete": true,
+    "mode": "full",
+    "traces_expected": 27886,
+    "traces_inspected": 27886
+  },
+  "schema_version": 1,
+  "scope": "Standard revision-1 big-endian fixed-length IEEE headers, no extended headers; not full standards or scientific validation.",
+  "status": "incomplete",
+  "tool": {
+    "name": "segy-accept",
+    "segyio": "1.9.14",
+    "version": "1.0.0"
+  }
+}

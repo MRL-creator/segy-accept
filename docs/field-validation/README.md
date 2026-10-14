@@ -1,6 +1,6 @@
-# F3 field-data validation — 14 October 2026
+# Field-data validation — 14 October 2026
 
-The experiment uses a **processed field-data subvolume**, not a generated fixture:
+The first experiment uses a **processed field-data subvolume**, not a generated fixture:
 the F3 dip-steered median-filter amplitude volume from
 [Equinor's example repository](https://github.com/equinor/segyio-notebooks/tree/c93e02027ea31d699b65be611f2747cc78cc967e/data/basic).
 The source is pinned to commit `c93e02027ea31d699b65be611f2747cc78cc967e`.
@@ -61,3 +61,49 @@ receiving-workflow choice, not independently verified navigation or calibration.
 Acceptance does not validate amplitudes, geology, acquisition quality, or CRS.
 One processed export does not establish compatibility with all producers.
 A geoscience practitioner's review remains outstanding.
+
+## Expanded v1.0 validation
+
+Two further files from the same pinned Equinor distribution add a smaller F3
+attribute volume and a legacy 2D NPRA line. They are independent files, not three
+independent acquisition projects or three independently certified writers.
+
+| Sample | Bytes | Independent observations | Checked outcomes |
+| --- | ---: | --- | --- |
+| F3 amplitude | 17,941,644 | 40,401 cells, inlines 230–430, crosslines 475–675 | Accepted declared workflow; wrong sampling rejected; missing grid expectation incomplete |
+| F3 similarity | 12,384,984 | 27,886 cells, inlines 230–420, crosslines 475–620 | Filename-extent policy rejected; observed-rectangle policy accepted; wrong sampling rejected; undeclared grid incomplete |
+| NPRA `3X_75_PR.SGY` | 5,168,048 | 1,592 complete records, 751 samples at 8,000 microseconds; revision word 0, IBM format 1 | Incomplete, with zero auditor-inspected headers: layout is outside the supported profile |
+
+The similarity filename advertises IL230–430/XL475–675, a rectangle with 40,401
+cells. The independently decoded headers contain a complete smaller rectangle;
+requiring the named extent yields **12,515 missing cells**. This does not establish
+corruption or a bad survey: the reason for the different extent is unknown. A
+receiving workflow that expects the observed smaller extent is accepted. Its
+wrong-sampling case changes only the interval in that accepted policy and requires
+explicit sampling-failure evidence, so an unrelated grid failure cannot satisfy it.
+
+The NPRA textual header declares custom legacy offsets. The auditor stops at the
+unsupported envelope and does not interpret those offsets as modern geometry.
+The independent experiment counts records and sampling separately; its 1,592-record
+count must not be confused with the auditor's zero inspected trace headers.
+
+```sh
+python tools/validate_f3.py --sample similarity --download
+python tools/validate_f3.py --sample npra --download
+```
+
+Use new destinations when repeating an experiment, for example `--out results-2`.
+All eight cases verify the pinned source fingerprint and immutability. The opt-in
+Windows/Linux workflow now runs all three files. Evidence:
+[similarity manifest](similarity/manifest.json), [filename grid](similarity/filename-grid.json),
+[observed rectangle](similarity/observed-rectangle.json),
+[sampling contradiction](similarity/wrong-sampling.json),
+[undeclared grid](similarity/undeclared-grid.json),
+[NPRA manifest](npra/manifest.json), [unsupported-layout report](npra/audit.json).
+
+The F3 licence/attribution above applies to both F3 exports. Equinor identifies
+the NPRA source as the public USGS archive but does not state a separate file
+licence. The [USGS archive description](https://www.usgs.gov/centers/central-energy-resources-science-center/science/geophysical-analysis-energy-resources)
+confirms its public-data role (accessed 14 October 2026). The NPRA file is used only
+for local/CI inspection; no redistribution licence is invented and no raw field
+files or amplitudes are included in this repository or release assets.

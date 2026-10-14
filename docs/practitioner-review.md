@@ -24,5 +24,7 @@ usable after specific fixes, or not yet useful. State any conflicts of interest.
 Permission is required before publishing a reviewer's identity or quoting feedback.
 Synthetic cases are enough for the review; confidential files are unnecessary.
 
-Until this review occurs, describe the project as a tested preview with one
-processed-field-data experiment, rather than a practitioner-validated product.
+The stable release covers the documented compatibility contract and tested input
+profile. Practitioner feedback is optional external evidence and can inform
+future improvements. Do not describe the project as practitioner-validated until
+such a review actually occurs; its absence does not block this scoped release.

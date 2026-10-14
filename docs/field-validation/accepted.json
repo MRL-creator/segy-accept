@@ -557,6 +557,6 @@
   "tool": {
     "name": "segy-accept",
     "segyio": "1.9.14",
-    "version": "0.1.0"
+    "version": "1.0.0"
   }
 }

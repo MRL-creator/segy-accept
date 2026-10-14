@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "segy-accept"
-version = "0.1.0"
+version = "1.0.0"
 description = "Explain whether a narrow SEG-Y dataset meets a declared receiving policy"
 readme = "README.md"
 license = "MIT"
@@ -12,7 +12,7 @@ requires-python = ">=3.10"
 dependencies = ["segyio==1.9.14"]
 authors = [{name = "Ramal Maharramli"}]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Scientific/Engineering",

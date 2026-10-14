@@ -1,27 +1,30 @@
-# v0.1.0 preview release evidence
+# v1.0.0 stable release evidence
 
 Prepared **14 October 2026** for a public scientific-software portfolio.
-This release is a usable preview for the stated receiving profile. It is not a
-claim of broad industrial validation or practitioner endorsement.
+This release stabilizes the [CLI and schema-1 contract](interface-contract.md)
+for the stated receiving profile. Stable describes that tested compatibility
+promise, not universal SEG-Y support or practitioner endorsement.
 
 | Requirement | Evidence |
 | --- | --- |
-| Behavioral checks | 108 passing tests locally; [remote quality matrix](https://github.com/MRL-creator/segy-accept/actions/workflows/ci.yml) checks Linux/Python 3.10 and 3.12, Windows/Python 3.12 |
+| Behavioral checks | 122 passing tests locally, including installed CLI/JSON consumer checks; [remote quality matrix](https://github.com/MRL-creator/segy-accept/actions/workflows/ci.yml) checks Linux/Python 3.10 and 3.12, Windows/Python 3.12 |
 | Distribution | Wheel and source archive build; each CI job installs the wheel in a new environment outside the source tree, with only runtime dependencies, then exercises all seven demo outcomes |
-| Real data | [F3 oracle and three outcomes](field-validation/README.md), 40,401 traces; [Windows/Linux field run](https://github.com/MRL-creator/segy-accept/actions/runs/38548998666) |
+| Real data | [Independent oracles and eight outcomes](field-validation/README.md) across F3 amplitude, F3 similarity, and legacy NPRA; [Windows/Linux field workflow](https://github.com/MRL-creator/segy-accept/actions/workflows/field-validation.yml) |
 | Independent writer | ObsPy clean/duplicate experiments and byte-level fixtures, covered by tests |
 | Resource evidence | [Raw benchmark repeats and limits](benchmarks.md); no unmeasured speedup or capacity claim |
 | Supply chain | Resolved dependencies audited in each CI job; action revisions pinned; patched setuptools build requirement |
 | Code review | Separate model reviewed input safety, CLI, measurement, field oracle, and packaging; actionable findings were fixed and rechecked |
 | User documentation | [README](../README.md), [rules](rules.md), [contributing](../CONTRIBUTING.md), [security](../SECURITY.md), and [changelog](../CHANGELOG.md) |
-| Practitioner assessment | **Pending**; no reviewer is available. [Review packet](practitioner-review.md) is ready |
+| Optional practitioner assessment | **Pending, not a release gate**. [Review packet](practitioner-review.md) is ready; no endorsement is claimed |
 
-The initial remote failures remain visible in history: one Python 3.10 JSON
+The preview's initial remote failures remain visible in history: one Python 3.10 JSON
 decoder crash and one old runner build-tool vulnerability. Both were repaired
 without skipping tests, ignoring vulnerabilities, or reducing declared support.
-The [three-job quality run](https://github.com/MRL-creator/segy-accept/actions/runs/38548992535)
-and two-job field run both passed on source revision `b97e88d`. Final package and
-documentation changes are rechecked by the quality workflow before tagging.
+The archived [v0.1.0 final quality run](https://github.com/MRL-creator/segy-accept/actions/runs/38549679091)
+and [original field run](https://github.com/MRL-creator/segy-accept/actions/runs/38548998666)
+remain available. The stable candidate reruns both workflows with the expanded
+field cases and consumer contract before tagging. The v0.1.0 release remains
+unchanged as historical evidence.
 
 ## Known limitations
 
@@ -42,7 +45,7 @@ documentation changes are rechecked by the quality workflow before tagging.
 
 ## Install, verify, and recover
 
-Download the wheel from the [v0.1.0 release](https://github.com/MRL-creator/segy-accept/releases/tag/v0.1.0)
+Download the wheel from the [v1.0.0 release](https://github.com/MRL-creator/segy-accept/releases/tag/v1.0.0)
 and install it in a virtual environment. Run `python -m segy_accept demo demo-output`
 with a new destination; compare the seven outcomes with the manifest. Release
 assets include SHA-256 checksums. Nothing is published to PyPI by this release.

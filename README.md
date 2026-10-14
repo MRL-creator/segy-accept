@@ -4,9 +4,11 @@
 
 [![Quality](https://github.com/MRL-creator/segy-accept/actions/workflows/ci.yml/badge.svg)](https://github.com/MRL-creator/segy-accept/actions/workflows/ci.yml)
 
-**v0.1.0 preview:** a small, tested tool for the explicit profile below. One
-processed field subvolume is validated; broader producer coverage and practitioner
-feedback remain pending. See [release evidence and known limits](docs/release-readiness.md).
+**v1.0.0 stable:** the CLI, policy format, and schema-1 report contract are stabilized
+for the explicit profile below. Three processed field examples exercise acceptance,
+receiving-policy rejection, and unsupported-layout handling. See the
+[interface contract](docs/interface-contract.md) and [release evidence](docs/release-readiness.md).
+Practitioner feedback remains optional external evidence, not a release gate.
 
 A file can open successfully while its sampling headers disagree or its post-stack
 grid contains duplicate and missing cells. This read-only auditor turns those
@@ -29,7 +31,8 @@ checks Linux/Python 3.10 and 3.12 plus Windows/Python 3.12.
 python -m venv .venv
 # Activate the environment: .venv\Scripts\Activate.ps1 on Windows,
 # or source .venv/bin/activate on macOS/Linux.
-python -m pip install "https://github.com/MRL-creator/segy-accept/releases/download/v0.1.0/segy_accept-0.1.0-py3-none-any.whl"
+python -m pip install "https://github.com/MRL-creator/segy-accept/releases/download/v1.0.0/segy_accept-1.0.0-py3-none-any.whl"
+segy-accept --version
 python -m segy_accept demo demo-output
 ```
 
@@ -40,7 +43,7 @@ The destination must be new. No data download, account, GPU, or server is needed
 [Open the checked-in sample report](examples/sample-report.html) or
 [inspect its JSON findings](examples/sample-report.json).
 
-![Synthetic dataset acceptance report](docs/report-preview.png)
+![Synthetic dataset acceptance report, preview illustration](docs/report-preview.png)
 
 | Example | Expected outcome | What it demonstrates |
 | --- | --- | --- |
@@ -106,6 +109,8 @@ is embedded, so an unchanged input/policy/environment gives unchanged output.
 A completed rejection can contain unknown findings. Missing policy dimensions
 are **unknown**, not disabled passing checks. To reach acceptance, declare both
 sampling expectations, coordinate expectations, and the expected grid.
+Omitted or null expectations mean undeclared. The default-expanded
+`policy.definition` embedded in a report can be saved as JSON and replayed.
 
 Existing reports are preserved unless `--overwrite` is supplied. Report targets
 that alias the input or policy are refused, including hardlinks. Do not modify
@@ -140,9 +145,10 @@ python -m build
 
 [Rules](docs/rules.md) explain each check. [Validation](docs/validation.md)
 describes the independent byte-level fixtures, tested environment, and remaining
-work. The [field-data experiment](docs/field-validation/README.md) compares
-40,401 real traces against an independent byte-level oracle and three receiving
-policies. [Contributing](CONTRIBUTING.md) explains source installation and checks.
+work. The [field-data experiments](docs/field-validation/README.md) cover three
+processed files and eight policy/layout scenarios, including an independently
+confirmed filename/grid extent discrepancy. [Contributing](CONTRIBUTING.md)
+explains source installation and checks.
 
 ### Independent writer and performance experiments
 

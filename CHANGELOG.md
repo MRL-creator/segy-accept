@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.0.0 — stable scoped interface, 14 October 2026
+
+- Stabilize CLI options, exit semantics, rule IDs, policy format, and schema-1 JSON
+  fields under an explicit compatibility contract; keep the supported SEG-Y profile.
+- Fix replay of default-expanded policies with undeclared/null sampling expectations.
+- Add `--version` and installed-package metadata consistency checks.
+- Expand real-data evidence to three processed files and eight scenarios. Confirm
+  12,515 missing cells when the F3 similarity filename extent is required; accept
+  its observed smaller rectangle and explicitly flag unsupported legacy NPRA input.
+- Require specific sampling-failure evidence rather than accepting rejection for
+  an unrelated reason. Retain immutable input hashes and exclude raw data from releases.
+- Add installed CLI/JSON consumer regressions and make wheel checks select the
+  current version even when older build artifacts remain. 122 local tests pass.
+- Treat practitioner feedback as optional external evidence, with no endorsement claimed.
+
 ## 0.1.0 — initial preview, 14 October 2026
 
 - Actionable terminal summaries with prioritized findings, reasons, remedies, and report paths.

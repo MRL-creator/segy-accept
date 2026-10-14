@@ -3,8 +3,8 @@
 Verified locally on **14 October 2026**, Windows, Python 3.12.14,
 segyio 1.9.14 and NumPy 2.5.4.
 
-Current local snapshot: **108 tests pass**, with **90% statement coverage** across the
-core auditor and optional developer experiments (705 statements, 69 not covered).
+Current local snapshot: **122 tests pass**, with **90% statement coverage** across the
+core auditor and optional developer experiments (707 statements, 69 not covered).
 Ruff checks and formatting pass; wheel and source-distribution builds succeed.
 The dependency audit includes the newly installed ObsPy/psutil stack and reports
 no known vulnerabilities locally. The published quality workflow checks Linux/Python
@@ -19,6 +19,10 @@ in a separate environment with neither ObsPy nor psutil installed.
 - Stdlib-generated fixture bytes open in real segyio; tests do not mock the parser.
 - Clean, contradictory, truncated and unsupported files produce distinct outcomes.
 - Repeated audits produce identical results and leave source bytes unchanged.
+- Schema-1 consumer tests exercise the installed command and seven real-file outcomes,
+  validate JSON field types/rule IDs/exit semantics, and independently recompute policy
+  hashes. Default-expanded policies replay even when sampling expectations are null.
+  Package metadata and the installed `--version` output must agree.
 - A real-hardlink test verifies overwrite refusal when a report aliases an input.
 - Unit and scalar checks run independently. Negative scalar division preserves the
   tested inclusive decimal boundary. Unknown metadata never becomes acceptance.
@@ -65,15 +69,16 @@ No test was skipped or weakened to work around that environment.
 ## Remaining evidence to collect
 
 Remote quality checks and an opt-in Windows/Linux field experiment are published.
-The test fixtures and single processed field subvolume do not represent
+The test fixtures and three processed field examples do not represent
 all producer variants, real survey semantics, or an independently certified SEG-Y writer.
 
-The [F3 field experiment](field-validation/README.md) verifies 40,401 real trace
-headers with an independent stdlib oracle and three contrasting workflow policies.
+The [field experiments](field-validation/README.md) verify 40,401 F3 amplitude
+headers, 27,886 F3 similarity headers, and an unsupported 1,592-record legacy NPRA
+file with an independent stdlib oracle across eight policy/layout scenarios.
 The resource guards remain ceilings, not measured supported capacities. Future
 work: broader producer samples, practitioner feedback, and a focused upstream contribution.
-These follow the career report's roadmap; they are not required to try this working
-local first version.
+These follow the career report's roadmap. Practitioner feedback is optional and
+does not block the stable compatibility contract.
 
 Remote testing exposed a deeply nested JSON crash on Python 3.10. The decoder's
 recursion error is now translated into an invalid-policy outcome, with a deeper

@@ -1,0 +1,30 @@
+{
+  "cases": [
+    {
+      "actual": "incomplete",
+      "case": "unsupported-legacy-profile",
+      "expected": "incomplete"
+    }
+  ],
+  "license_as_stated": "Source README identifies public USGS NPRA archive; no separate file licence stated. Raw file not redistributed.",
+  "license_source": "https://github.com/equinor/segyio-notebooks/blob/c93e02027ea31d699b65be611f2747cc78cc967e/README.md",
+  "limits": "Selected processed exports only; no EPSG verification, amplitude QC or scientific calibration.",
+  "oracle": {
+    "fixed_length_flag": 0,
+    "format_code": 1,
+    "geometry": "Not interpreted: legacy textual header declares custom offsets",
+    "revision_word": 0,
+    "sample_interval_us": 8000,
+    "samples_per_trace": 751,
+    "traces": 1592
+  },
+  "raw_data_redistributed": false,
+  "retrieved_at_utc": null,
+  "sha256": "4a8490434e6e09cb0c2389328d42f7ad710d1fbc96a83be2c529ceec321d9722",
+  "size_bytes": 5168048,
+  "source_file": "3X_75_PR.SGY",
+  "source_reviewed": "2026-10-14",
+  "source_revision": "c93e02027ea31d699b65be611f2747cc78cc967e",
+  "source_url": "https://raw.githubusercontent.com/equinor/segyio-notebooks/c93e02027ea31d699b65be611f2747cc78cc967e/data/basic/3X_75_PR.SGY",
+  "validated_at_utc": "2026-10-14T10:48:14.630228+00:00"
+}

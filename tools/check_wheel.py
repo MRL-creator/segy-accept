@@ -7,17 +7,19 @@ import tempfile
 import venv
 from pathlib import Path
 
+from segy_accept import __version__
+
 root = Path(__file__).resolve().parents[1]
-wheels = list((root / "dist").glob("segy_accept-*.whl"))
-if len(wheels) != 1:
-    raise ValueError("build exactly one release wheel before checking it")
+wheel = root / "dist" / f"segy_accept-{__version__}-py3-none-any.whl"
+if not wheel.is_file():
+    raise ValueError(f"build the current release wheel before checking it: {wheel.name}")
 with tempfile.TemporaryDirectory() as temporary:
     directory = Path(temporary)
     environment = directory / "runtime"
     venv.EnvBuilder(with_pip=False).create(environment)
     executable = environment / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
     subprocess.run(
-        [sys.executable, "-m", "pip", "--python", str(executable), "install", str(wheels[0])],
+        [sys.executable, "-m", "pip", "--python", str(executable), "install", str(wheel)],
         check=True,
         cwd=directory,
     )
@@ -26,7 +28,10 @@ with tempfile.TemporaryDirectory() as temporary:
             str(executable),
             "-I",
             "-c",
-            "from importlib.util import find_spec; assert find_spec('obspy') is None; assert find_spec('psutil') is None",
+            "from importlib.util import find_spec\n"
+            "from importlib.metadata import version\n"
+            f"if version('segy-accept') != {__version__!r}: raise RuntimeError('wrong installed version')\n"
+            "if any(find_spec(p) is not None for p in ['obspy','psutil']): raise RuntimeError('optional dependencies installed')",
         ],
         check=True,
         cwd=directory,
