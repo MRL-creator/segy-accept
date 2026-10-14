@@ -94,6 +94,7 @@ def worker(path, policy_path):
         json_text(
             {
                 "audit_seconds": elapsed,
+                "worker_pid": os.getpid(),
                 "status": result["status"],
                 "traces_inspected": result["scan"]["traces_inspected"],
                 "input_sha256": result["input"]["sha256"],
@@ -127,13 +128,22 @@ def measure_process(path, policy_path, interval=0.005, timeout=120):
     started = time.perf_counter()
     with tempfile.TemporaryFile() as output, tempfile.TemporaryFile() as errors:
         process = subprocess.Popen(command, stdout=output, stderr=errors)
+        observed = {}
         try:
             monitored = psutil.Process(process.pid)
             while process.poll() is None:
                 if time.perf_counter() - started > timeout:
                     raise TimeoutError("benchmark worker exceeded its timeout")
                 try:
-                    peak = max(peak, monitored.memory_info().rss)
+                    tree = [monitored, *monitored.children(recursive=True)]
+                    rss = 0
+                    for member in tree:
+                        try:
+                            rss += member.memory_info().rss
+                            observed[member.pid] = member
+                        except psutil.NoSuchProcess:
+                            continue
+                    peak = max(peak, rss)
                     samples += 1
                 except psutil.NoSuchProcess:
                     break
@@ -148,14 +158,22 @@ def measure_process(path, policy_path, interval=0.005, timeout=120):
             result = json.load(output)
             if not samples or not peak:
                 raise RuntimeError("no usable RSS samples were collected")
+            if result["worker_pid"] not in observed:
+                raise RuntimeError("RSS sampling did not observe the actual Python worker")
             result.update(
                 sampled_peak_rss_bytes=peak,
+                rss_processes_observed=sorted(observed),
                 rss_samples=samples,
                 process_seconds=time.perf_counter() - started,
             )
             return result
         finally:
             if process.poll() is None:
+                for member in reversed(list(observed.values())):
+                    try:
+                        member.kill()
+                    except psutil.NoSuchProcess:
+                        continue
                 process.kill()
                 process.wait()
 
@@ -233,7 +251,7 @@ def run_suite(destination, traces, samples=256, repeats=5, interval=0.005, timeo
         "measured_at_utc": datetime.now(timezone.utc).isoformat(),
         "environment": environment(),
         "rss_sample_interval_seconds": interval,
-        "method": "One discarded warm-up per case; independent fresh process per repeat; cache not flushed. Generation/reporting excluded from audit time. RSS includes process startup and may miss transients.",
+        "method": "One discarded warm-up per case; independent fresh process per repeat; cache not flushed. Generation/reporting excluded from audit time. RSS sums the worker process tree (including Windows venv launcher), includes startup, may double-count shared pages and miss transients.",
         "cases": [],
     }
     for index, count in enumerate(traces):

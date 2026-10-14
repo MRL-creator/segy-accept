@@ -62,6 +62,7 @@ def test_isolated_measurement_produces_resource_evidence(tmp_path):
     assert run["sampled_peak_rss_bytes"] > 0
     assert run["rss_samples"] > 0
     assert run["process_seconds"] >= run["audit_seconds"]
+    assert run["worker_pid"] in run["rss_processes_observed"]
     json.dumps(run, allow_nan=False)
 
 
