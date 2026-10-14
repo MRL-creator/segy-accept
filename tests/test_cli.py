@@ -2,6 +2,7 @@ import json
 
 import pytest
 
+from segy_accept import __version__
 from segy_accept.cli import main
 from segy_accept.report import render_html
 
@@ -195,3 +196,8 @@ def test_accepted_with_warning_still_surfaces_the_warning(
     text = capsys.readouterr().out
     assert "WARNING coordinates.scalar" in text
     assert "No blocking findings" in text
+
+
+def test_cli_identifies_its_version_without_an_input(capsys):
+    assert main(["--version"]) == 0
+    assert capsys.readouterr().out.strip() == f"segy-accept {__version__}"

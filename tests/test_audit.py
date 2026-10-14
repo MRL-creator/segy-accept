@@ -182,3 +182,10 @@ def test_high_bit_sampling_words_are_not_silently_accepted(write_segy, policy_da
     result = run(path, policy_data)
     assert result["status"] == "incomplete"
     assert finding(result, "format.profile")["status"] == "failure"
+
+
+def test_report_policy_can_be_replayed_when_sampling_was_undeclared(write_segy):
+    path = write_segy()
+    result = run(path, {"schema_version": 1, "name": "inspect", "version": "1"})
+    replayed = run(path, result["policy"]["definition"])
+    assert replayed == result

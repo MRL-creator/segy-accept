@@ -7,6 +7,7 @@ import sys
 import tempfile
 from pathlib import Path
 
+from . import __version__
 from .audit import audit
 from .policy import Policy
 from .reader import file_signature, regular_file_stat
@@ -98,6 +99,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(
         description="Read-only SEG-Y acceptance against a declared workflow policy"
     )
+    parser.add_argument("--version", action="version", version=f"segy-accept {__version__}")
     subparsers = parser.add_subparsers(dest="command", required=True)
     inspect = subparsers.add_parser(
         "audit", help="inspect a local SEG-Y file and produce JSON/HTML reports"

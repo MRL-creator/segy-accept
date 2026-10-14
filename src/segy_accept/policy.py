@@ -53,7 +53,7 @@ class Policy:
             if not isinstance(data[label], str) or not data[label].strip():
                 raise ValueError(f"{label} must be a nonempty string")
         for label in ["sample_interval_us", "samples_per_trace"]:
-            if label in data:
+            if data.get(label) is not None:
                 integer(data[label], label, maximum=32767)
         coordinates = data.get("coordinates")
         if coordinates is not None:
