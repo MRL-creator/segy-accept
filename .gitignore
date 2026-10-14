@@ -1,6 +1,6 @@
 .venv/
 .wheel-check/
-.wheel-smoke/
+.wheel-smoke*/
 __pycache__/
 *.py[cod]
 .pytest_cache/

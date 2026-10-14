@@ -1,0 +1,167 @@
+{
+  "binary_header": {
+    "measurement_system": 1,
+    "sample_interval_us": 2000,
+    "samples_per_trace": 64,
+    "size_bytes": 5584,
+    "trace_count": 4
+  },
+  "coordinate_examples": [
+    {
+      "raw_x": 10000,
+      "raw_y": 20000,
+      "scalar": -10,
+      "scaled_x": 1000.0,
+      "scaled_y": 2000.0,
+      "trace": 1,
+      "units_verified": true
+    },
+    {
+      "raw_x": 10000,
+      "raw_y": 20100,
+      "scalar": -10,
+      "scaled_x": 1000.0,
+      "scaled_y": 2010.0,
+      "trace": 2,
+      "units_verified": true
+    },
+    {
+      "raw_x": 10100,
+      "raw_y": 20000,
+      "scalar": -10,
+      "scaled_x": 1010.0,
+      "scaled_y": 2000.0,
+      "trace": 3,
+      "units_verified": true
+    },
+    {
+      "raw_x": 10100,
+      "raw_y": 20100,
+      "scalar": -10,
+      "scaled_x": 1010.0,
+      "scaled_y": 2010.0,
+      "trace": 4,
+      "units_verified": true
+    }
+  ],
+  "findings": [
+    {
+      "count": 0,
+      "examples": [],
+      "next_step": "Use the documented revision-1 fixed-length IEEE profile; inspect/export other layouts separately.",
+      "rule_id": "format.profile",
+      "status": "pass",
+      "title": "Supported envelope and complete header scan"
+    },
+    {
+      "count": 0,
+      "examples": [],
+      "next_step": "Confirm sample count/interval with the producer; correct metadata or re-export outside this tool.",
+      "rule_id": "sampling.consistency",
+      "status": "pass",
+      "title": "Trace sampling agrees with the binary header"
+    },
+    {
+      "count": 0,
+      "examples": [],
+      "next_step": "Supply both sampling expectations and confirm that they describe the intended workflow.",
+      "rule_id": "sampling.policy",
+      "status": "pass",
+      "title": "Binary sampling agrees with declared workflow expectations"
+    },
+    {
+      "count": 0,
+      "examples": [],
+      "next_step": "Confirm coordinate units and binary measurement system with the producer; do not guess a CRS.",
+      "rule_id": "coordinates.units",
+      "status": "pass",
+      "title": "CDP coordinate units agree with the receiving policy"
+    },
+    {
+      "count": 0,
+      "examples": [],
+      "next_step": "Confirm the scalar; positive multiplies, negative divides. Zero is an explicit unity fallback warning.",
+      "rule_id": "coordinates.scalar",
+      "status": "pass",
+      "title": "Coordinate scaling is explicit and interpretable"
+    },
+    {
+      "count": 0,
+      "examples": [],
+      "next_step": "Check CDP fields, scalar, units and declared reference/bounds. No reprojection or repair is performed.",
+      "rule_id": "coordinates.bounds",
+      "status": "pass",
+      "title": "Scaled CDP X/Y falls inside the declared bounds"
+    },
+    {
+      "count": 2,
+      "examples": [
+        {
+          "crossline": 20,
+          "inline": 10,
+          "kind": "duplicate",
+          "trace": 2
+        },
+        {
+          "crossline": 21,
+          "inline": 10,
+          "kind": "missing"
+        }
+      ],
+      "next_step": "Confirm the post-stack grid policy; review duplicates, unexpected cells and missing cells before import.",
+      "rule_id": "geometry.grid",
+      "status": "failure",
+      "title": "One trace per declared Cartesian post-stack cell"
+    }
+  ],
+  "input": {
+    "name": "obspy-duplicate.sgy",
+    "sha256": "8dcb13e526ffe9d5ed11dfcc45a238a1e5d77fd4ffc03dc0129b189d8d9d0bd7",
+    "size_bytes": 5584
+  },
+  "policy": {
+    "definition": {
+      "coordinates": {
+        "bounds": [
+          900,
+          1100,
+          1900,
+          2100
+        ],
+        "reference": "Synthetic local grid, not a real CRS",
+        "units": "metres"
+      },
+      "example_limit": 5,
+      "grid": {
+        "crosslines": [
+          20,
+          21
+        ],
+        "inlines": [
+          10,
+          11
+        ]
+      },
+      "name": "independent-synthetic-grid",
+      "sample_interval_us": 2000,
+      "samples_per_trace": 64,
+      "schema_version": 1,
+      "version": "1"
+    },
+    "sha256": "ed5cd465ae4e6f4e596aca8ca9ad84c7cfcda10e39c7216039dab6fd30dd1edc"
+  },
+  "scan": {
+    "complete": true,
+    "mode": "full",
+    "traces_expected": 4,
+    "traces_inspected": 4
+  },
+  "schema_version": 1,
+  "scope": "Standard revision-1 big-endian fixed-length IEEE headers, no extended headers; not full standards or scientific validation.",
+  "status": "rejected",
+  "tool": {
+    "name": "segy-accept",
+    "segyio": "1.9.14",
+    "version": "0.1.0"
+  }
+}

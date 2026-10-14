@@ -1,12 +1,20 @@
-# First-version verification
+# Local verification
 
 Verified locally on **14 October 2026**, Windows, Python 3.12.14,
 segyio 1.9.14 and NumPy 2.5.4.
 
+Current snapshot: **82 tests pass**, with **90% statement coverage** across the
+core auditor and optional developer experiments (641 statements, 67 not covered).
+Ruff checks and formatting pass; wheel and source-distribution builds succeed.
+The dependency audit includes the newly installed ObsPy/psutil stack and reports
+no known vulnerabilities. These checks ran on Windows/Python 3.12 only.
+The updated wheel's seven-case demo also runs from outside the source directory
+in a separate environment with neither ObsPy nor psutil installed.
+
 ## Evidence collected
 
-- **60 tests pass**, with **95% statement coverage** (385 statements, 18 not covered).
-  Coverage is descriptive, not proof of scientific validity.
+- The full test suite covers the audit contract, independent writer, and benchmark
+  behavior. Coverage is descriptive, not proof of scientific validity.
 - Stdlib-generated fixture bytes open in real segyio; tests do not mock the parser.
 - Clean, contradictory, truncated and unsupported files produce distinct outcomes.
 - Repeated audits produce identical results and leave source bytes unchanged.
@@ -52,9 +60,44 @@ The GitHub Actions workflow is prepared but has not run remotely. Linux and othe
 Python versions remain unverified locally. The test fixtures do not represent
 all producer variants, real survey semantics, or an independently certified SEG-Y writer.
 
-No controlled runtime/RSS benchmark or field-data study has been performed.
-The resource guards are ceilings, not measured supported capacities. Future work:
-measure increasing generated workloads, test with a separately produced licensed
-file, obtain user feedback, and evaluate a focused upstream contribution.
+No field-data study has been performed. The resource guards are ceilings, not
+measured supported capacities. Future work: obtain a legally usable field sample,
+collect user feedback, and evaluate a focused upstream contribution.
 These follow the career report's roadmap; they are not required to try this working
 local first version.
+
+## Independent writer experiment
+
+The optional validation module uses the public ObsPy `Stream.write` interface,
+with float32 arrays and explicit standard headers. It does not use our byte
+writer or segyio's writer. ObsPy 1.5.1 writes two four-trace files: a clean
+Cartesian grid and a duplicate-cell variant. The auditor accepts the first and
+rejects the second, identifying both the duplicate and the missing cell.
+Tests independently inspect header bytes, read sample values back through ObsPy,
+and verify source immutability and fingerprint matching.
+
+```sh
+python -m pip install -e ".[validation]"
+python -m segy_accept.validation independent-output
+```
+
+The arrays and generated files are our synthetic MIT fixtures. ObsPy itself is a
+separate LGPL-3.0 dependency. This verifies compatibility with one independent
+software writer, not real survey semantics or certified standards compliance.
+Evidence: [writer manifest](evidence/independent-writer.json),
+[clean audit](evidence/obspy-clean-audit.json), and
+[contradictory audit](evidence/obspy-duplicate-audit.json).
+The command regenerates files and offline HTML reports in a new directory.
+
+Sources, accessed 14 October 2026: [ObsPy SEG-Y support and licence](https://docs.obspy.org/packages/obspy.io.segy.html)
+and [writer API](https://docs.obspy.org/packages/autogen/obspy.io.segy.core._write_segy.html).
+The auditor retains its narrower signed revision-1 sampling profile even though
+the writer supports a wider interval range.
+
+## Performance evidence
+
+[The baseline](benchmarks.md) records five repeats at 1,000, 10,000, and 100,000
+traces, plus a fixed-trace-count comparison with longer payloads. Raw evidence
+contains environment details, all timings, sampled process-tree RSS, and hashes.
+No noisy timing threshold is imposed in CI. Tests check measurement correctness,
+invalid workloads, optional Git metadata, worker failures, and timeout cleanup.

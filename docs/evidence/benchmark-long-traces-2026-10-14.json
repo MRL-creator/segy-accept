@@ -1,0 +1,131 @@
+{
+  "cases": [
+    {
+      "file_bytes": 84323600,
+      "grid_shape": [
+        100,
+        100
+      ],
+      "input_sha256": "2772fb3b2068f1e0d8dea88306ee548f74ad30169f3d837ed8edbb4a62db5c03",
+      "runs": [
+        {
+          "audit_seconds": 0.18913180000004104,
+          "input_sha256": "2772fb3b2068f1e0d8dea88306ee548f74ad30169f3d837ed8edbb4a62db5c03",
+          "process_seconds": 0.6177071000001888,
+          "rss_processes_observed": [
+            5584,
+            19604
+          ],
+          "rss_samples": 106,
+          "sampled_peak_rss_bytes": 42774528,
+          "status": "accepted",
+          "traces_inspected": 10000,
+          "worker_pid": 5584
+        },
+        {
+          "audit_seconds": 0.18997819999981402,
+          "input_sha256": "2772fb3b2068f1e0d8dea88306ee548f74ad30169f3d837ed8edbb4a62db5c03",
+          "process_seconds": 0.6225453000001835,
+          "rss_processes_observed": [
+            616,
+            18124
+          ],
+          "rss_samples": 106,
+          "sampled_peak_rss_bytes": 42631168,
+          "status": "accepted",
+          "traces_inspected": 10000,
+          "worker_pid": 616
+        },
+        {
+          "audit_seconds": 0.18962390000001506,
+          "input_sha256": "2772fb3b2068f1e0d8dea88306ee548f74ad30169f3d837ed8edbb4a62db5c03",
+          "process_seconds": 0.6226967000000059,
+          "rss_processes_observed": [
+            21068,
+            21092
+          ],
+          "rss_samples": 107,
+          "sampled_peak_rss_bytes": 42778624,
+          "status": "accepted",
+          "traces_inspected": 10000,
+          "worker_pid": 21068
+        },
+        {
+          "audit_seconds": 0.18927639999992607,
+          "input_sha256": "2772fb3b2068f1e0d8dea88306ee548f74ad30169f3d837ed8edbb4a62db5c03",
+          "process_seconds": 0.6224370999998428,
+          "rss_processes_observed": [
+            21584,
+            23524
+          ],
+          "rss_samples": 107,
+          "sampled_peak_rss_bytes": 42717184,
+          "status": "accepted",
+          "traces_inspected": 10000,
+          "worker_pid": 23524
+        },
+        {
+          "audit_seconds": 0.19009030000006533,
+          "input_sha256": "2772fb3b2068f1e0d8dea88306ee548f74ad30169f3d837ed8edbb4a62db5c03",
+          "process_seconds": 0.6197125999999571,
+          "rss_processes_observed": [
+            21720,
+            21732
+          ],
+          "rss_samples": 106,
+          "sampled_peak_rss_bytes": 42852352,
+          "status": "accepted",
+          "traces_inspected": 10000,
+          "worker_pid": 21720
+        }
+      ],
+      "samples": 2048,
+      "summary": {
+        "max_audit_seconds": 0.19009030000006533,
+        "max_sampled_peak_rss_bytes": 42852352,
+        "median_audit_seconds": 0.18962390000001506,
+        "min_audit_seconds": 0.18913180000004104
+      },
+      "traces": 10000,
+      "warmup": {
+        "audit_seconds": 0.1912899000001289,
+        "input_sha256": "2772fb3b2068f1e0d8dea88306ee548f74ad30169f3d837ed8edbb4a62db5c03",
+        "process_seconds": 0.6438510000000406,
+        "rss_processes_observed": [
+          21624,
+          24020
+        ],
+        "rss_samples": 109,
+        "sampled_peak_rss_bytes": 42823680,
+        "status": "accepted",
+        "traces_inspected": 10000,
+        "worker_pid": 24020
+      }
+    }
+  ],
+  "environment": {
+    "git_dirty": true,
+    "git_revision": "07c75422c50a994ec0aa3d84290666e6163b5d11",
+    "logical_cpus": 16,
+    "package_source_sha256": "5e88c149bcb217793d26854d32f255fbff1248e47e3f11a95ab06988c98b2df0",
+    "physical_cpus": 8,
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "thread_environment": {
+      "MKL_NUM_THREADS": null,
+      "OMP_NUM_THREADS": null,
+      "OPENBLAS_NUM_THREADS": null
+    },
+    "total_ram_bytes": 16369315840,
+    "versions": {
+      "numpy": "2.5.4",
+      "psutil": "7.2.2",
+      "segyio": "1.9.14"
+    }
+  },
+  "measured_at_utc": "2026-10-14T09:53:01.082452+00:00",
+  "method": "One discarded warm-up per case; independent fresh process per repeat; cache not flushed. Generation/reporting excluded from audit time. RSS sums the worker process tree (including Windows venv launcher), includes startup, may double-count shared pages and miss transients.",
+  "rss_sample_interval_seconds": 0.005,
+  "schema_version": 1
+}

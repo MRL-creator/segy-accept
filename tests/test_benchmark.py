@@ -10,8 +10,8 @@ from segy_accept.benchmark import (
     git_metadata,
     measure_process,
     run_suite,
-    summarize,
     stop_process_tree,
+    summarize,
 )
 from segy_accept.cli import load_policy
 

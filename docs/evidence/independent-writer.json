@@ -1,0 +1,17 @@
+{
+  "contradictory_input": "obspy-duplicate.sgy",
+  "contradictory_sha256": "8dcb13e526ffe9d5ed11dfcc45a238a1e5d77fd4ffc03dc0129b189d8d9d0bd7",
+  "expected_clean_status": "accepted",
+  "expected_contradictory_status": "rejected",
+  "fixture_license": "MIT",
+  "input": "obspy-clean.sgy",
+  "input_sha256": "31fd52d81099fc1a5ec5c0583edf215bd668cdfd0cf97b13921e2b00c8ab8442",
+  "limits": "Owned synthetic arrays, not independently certified or representative field data.",
+  "source": "https://docs.obspy.org/packages/obspy.io.segy.html",
+  "synthetic": true,
+  "writer": {
+    "library_license": "LGPL-3.0",
+    "name": "ObsPy",
+    "version": "1.5.1"
+  }
+}

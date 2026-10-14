@@ -22,7 +22,7 @@ package; the included CI matrix is prepared, but has not run on GitHub yet.
 python -m venv .venv
 # Activate the environment: .venv\Scripts\Activate.ps1 on Windows,
 # or source .venv/bin/activate on macOS/Linux.
-python -m pip install -e ".[dev]"
+python -m pip install -e .
 python -m segy_accept demo demo-output
 ```
 
@@ -111,6 +111,7 @@ industrial adoption or uniqueness is claimed. See [decisions and sources](docs/d
 ## Verification and limits
 
 ```sh
+python -m pip install -e ".[dev]"
 python -m pytest --cov=segy_accept --cov-report=term-missing
 python -m ruff check .
 python -m ruff format --check .
@@ -121,6 +122,29 @@ python -m build
 describes the independent byte-level fixtures, tested environment, and remaining
 work. `.github/workflows/ci.yml` is ready for a repository push; no remote
 repository has been created by this implementation.
+
+### Independent writer and performance experiments
+
+Two optional, offline experiments are available. Each destination must be new.
+The validation extra adds ObsPy; the benchmark extra adds psutil. Neither is
+required for normal auditing.
+
+```sh
+python -m pip install -e ".[validation,benchmark]"
+python -m segy_accept.validation independent-output
+python -m segy_accept.benchmark benchmark-output --traces 1000 10000 100000 --repeats 5
+```
+
+The independent writer creates owned synthetic arrays with ObsPy, then checks
+that the clean file is accepted and a duplicated grid cell is rejected. It does
+not certify SEG-Y conformance or substitute for field-data validation.
+
+The benchmark streams generated records to disk, audits each workload in fresh
+processes, and saves all repeats, hashes, environment details, and sampled memory.
+It includes input hashing in audit time and excludes generation, imports, and
+report rendering. Memory sums the worker process tree, including the Windows
+virtual-environment launcher; shared pages may be counted twice and short peaks
+may be missed. See the [measured baseline and reproducible commands](docs/benchmarks.md).
 
 Every trace header is scanned; payload amplitudes are not inspected. Global grid
 checks use O(unique cells) memory. The initial guards are 2 GiB per file,
