@@ -70,6 +70,26 @@ def save_reports(result, directory, protected, overwrite=False):
                 temporary.unlink(missing_ok=True)
 
 
+def print_summary(result, directory):
+    print(f"{result['status']}: {result['scan']['traces_inspected']} trace headers inspected")
+    if not result["scan"]["complete"]:
+        print("Scan incomplete; acceptance is not established.")
+    priority = {"failure": 0, "unknown": 1, "warning": 2, "pass": 3}
+    for finding in sorted(result["findings"], key=lambda item: priority[item["status"]]):
+        if finding["status"] == "pass":
+            continue
+        print(
+            f"  {finding['status'].upper()} {finding['rule_id']}: {finding['count']} reported events"
+        )
+        if finding["examples"] and "reason" in finding["examples"][0]:
+            print(f"    Reason: {finding['examples'][0]['reason']}")
+        print(f"    {finding['next_step']}")
+    if result["status"] == "accepted":
+        print("No blocking findings under the declared policy and supported profile.")
+    print(f"HTML report: {(directory / 'audit.html').resolve()}")
+    print(f"JSON report: {(directory / 'audit.json').resolve()}")
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(
         description="Read-only SEG-Y acceptance against a declared workflow policy"
@@ -109,9 +129,7 @@ def main(argv=None):
         policy = load_policy(args.policy)
         result = audit(args.input, policy)
         save_reports(result, args.out, [args.input, args.policy], args.overwrite)
-        print(
-            f"{result['status']}: {result['scan']['traces_inspected']} trace headers inspected; {args.out}"
-        )
+        print_summary(result, args.out)
         return {"accepted": 0, "rejected": 1, "incomplete": 2}[result["status"]]
     except (OSError, ValueError, UnicodeError) as error:
         print(f"segy-accept: {error}", file=sys.stderr)

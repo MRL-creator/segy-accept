@@ -3,8 +3,8 @@
 Verified locally on **14 October 2026**, Windows, Python 3.12.14,
 segyio 1.9.14 and NumPy 2.5.4.
 
-Current snapshot: **82 tests pass**, with **90% statement coverage** across the
-core auditor and optional developer experiments (641 statements, 67 not covered).
+Current snapshot: **106 tests pass**, with **90% statement coverage** across the
+core auditor and optional developer experiments (701 statements, 69 not covered).
 Ruff checks and formatting pass; wheel and source-distribution builds succeed.
 The dependency audit includes the newly installed ObsPy/psutil stack and reports
 no known vulnerabilities. These checks ran on Windows/Python 3.12 only.
@@ -21,6 +21,13 @@ in a separate environment with neither ObsPy nor psutil installed.
 - A real-hardlink test verifies overwrite refusal when a report aliases an input.
 - Unit and scalar checks run independently. Negative scalar division preserves the
   tested inclusive decimal boundary. Unknown metadata never becomes acceptance.
+- Input-safety regressions cover same-size/timestamp file replacement, mutation,
+  disappearance, nonregular inputs, hashing growth, and policy growth. Changed inputs
+  invalidate the fingerprint and passing checks; coordinate examples are cleared.
+  Checks use file identity/size/mtime and are not an atomic snapshot guarantee.
+- Terminal summaries explain failures, unknowns, warnings, unsupported profiles,
+  and report paths. Inverting the incomplete-scan display condition made its focused
+  regression fail; the source was restored before final verification.
 - Bounded examples retain evidence at the highest encountered severity; event counts
   continue after the cap.
 - High-bit sampling words are rejected under the documented signed revision-1 profile.

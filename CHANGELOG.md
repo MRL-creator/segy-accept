@@ -2,6 +2,9 @@
 
 ## Unreleased - local improvements, 14 October 2026
 
+- Actionable terminal summaries with prioritized findings, reasons, remedies, and report paths.
+- Regular-file guards and bounded policy/hash reads that cannot follow a growing file indefinitely.
+- Input replacement detection; changed or disappearing inputs invalidate fingerprints and passing findings.
 - Independent ObsPy writer compatibility experiment with clean and contradictory fixtures.
 - Optional isolated-process benchmark with raw repeats, fingerprints, machine details,
   sampled process-tree RSS, timeout cleanup, and a documented synthetic baseline.

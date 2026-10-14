@@ -140,3 +140,57 @@ def test_deeply_nested_json_is_an_invalid_policy(write_segy, tmp_path):
     policy = tmp_path / "policy.json"
     policy.write_text("[" * 1200 + "0" + "]" * 1200)
     assert main(["audit", str(path), "--policy", str(policy), "--out", str(tmp_path / "out")]) == 3
+
+
+def test_terminal_explains_rejection_and_points_to_reports(
+    write_segy, tmp_path, policy_data, capsys
+):
+    path = write_segy(traces=[{"dt": 4000}])
+    code, output = invoke(path, tmp_path, policy_data | {"grid": None})
+    assert code == 1
+    text = capsys.readouterr().out
+    assert "FAILURE sampling.consistency" in text
+    assert "Confirm sample count/interval with the producer" in text
+    assert "UNKNOWN geometry.grid" in text
+    assert text.index("FAILURE sampling.consistency") < text.index("UNKNOWN geometry.grid")
+    assert str((output / "audit.html").resolve()) in text
+    assert str((output / "audit.json").resolve()) in text
+
+
+def test_terminal_explains_missing_expectations(write_segy, tmp_path, capsys):
+    code, _ = invoke(
+        write_segy(), tmp_path, {"schema_version": 1, "name": "minimal", "version": "1"}
+    )
+    assert code == 2
+    text = capsys.readouterr().out
+    assert "UNKNOWN sampling.policy" in text
+    assert "Supply both sampling expectations" in text
+
+
+def test_accepted_terminal_result_does_not_suggest_repairs(
+    write_segy, tmp_path, policy_data, capsys
+):
+    assert invoke(write_segy(), tmp_path, policy_data)[0] == 0
+    text = capsys.readouterr().out
+    assert "accepted" in text
+    assert "FAILURE" not in text and "UNKNOWN" not in text
+    assert "No blocking findings" in text
+
+
+def test_terminal_explains_unsupported_input(write_segy, tmp_path, policy_data, capsys):
+    code, _ = invoke(write_segy(revision=512), tmp_path, policy_data)
+    assert code == 2
+    text = capsys.readouterr().out
+    assert "unsupported profile: requires revision 1.0" in text
+    assert "Scan incomplete" in text
+
+
+def test_accepted_with_warning_still_surfaces_the_warning(
+    write_segy, tmp_path, policy_data, capsys
+):
+    path = write_segy(traces=[{"scalar": 0, "x": 1000, "y": 2000}])
+    policy_data["grid"] = {"inlines": [10], "crosslines": [20]}
+    assert invoke(path, tmp_path, policy_data)[0] == 0
+    text = capsys.readouterr().out
+    assert "WARNING coordinates.scalar" in text
+    assert "No blocking findings" in text

@@ -51,6 +51,11 @@ The destination must be new. No data download, account, GPU, or server is needed
 segy-accept audit survey.sgy --policy examples/policy.json --out reports/survey
 ```
 
+The terminal lists failures first, followed by unknown findings and warnings,
+with reasons, next steps, and absolute paths to the HTML and JSON reports.
+An incomplete scan is stated explicitly. Use the JSON report and exit code for
+automation; terminal wording is intended for people.
+
 Edit the example policy to describe your actual workflow. Its reference is
 synthetic and must not be treated as a real survey CRS.
 
@@ -98,6 +103,14 @@ sampling expectations, coordinate expectations, and the expected grid.
 Existing reports are preserved unless `--overwrite` is supplied. Report targets
 that alias the input or policy are refused, including hardlinks. Do not modify
 input files or report directories concurrently with an audit.
+
+Inputs and policies must be regular files. Hashing is bounded to the original
+file size plus a one-byte growth check. Changes to file identity, size, or
+modification time invalidate the fingerprint, clear coordinate examples, and
+turn previously passing checks into unknown findings. If an input disappears
+after scanning begins, the result remains incomplete. These metadata checks
+are best-effort detection, not an atomic snapshot or a lock against concurrent
+writers; audit stable copies of data.
 
 ## What distinguishes this experiment
 

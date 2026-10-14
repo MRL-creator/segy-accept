@@ -38,6 +38,14 @@ Rejected takes precedence over unknown only for a complete audit. Incomplete
 input remains incomplete even if a detected structural defect is a failure.
 No overwriting reports by default; `--overwrite` permits replacing only report
 files after checking neither target aliases the source or policy.
+Inputs and policies must be regular files. Bound policy reads to 1 MiB plus a
+one-byte overflow probe and hashing to the initial file size plus one byte.
+Compare device/inode, size, and modification time to detect ordinary replacement
+or mutation. On detected instability, clear the fingerprint and coordinate
+examples, mark the scan incomplete, and change passing rules to unknown.
+This is best-effort detection; stable inputs remain required, with no atomic
+snapshot guarantee. Terminal summaries prioritize failures, unknowns, and warnings,
+include reasons/remedies and report paths; JSON and exit codes remain the machine contract.
 
 Generated fixtures include clean, contradictory sampling, duplicate/missing cells,
 coordinate scaling/unit/bounds cases, and unreadable/unsupported inputs. An independent
