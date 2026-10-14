@@ -89,3 +89,12 @@ remain synthetic and locally owned; no third-party field data are redistributed.
 Benchmark output records all repeats, sampling interval, environment, workload,
 source revision, and timing scope. Generation and reporting are outside the timed
 audit. Performance measurements are descriptive, not noisy CI timing gates.
+
+## Release authorization (14 October 2026)
+After reviewing the remaining release requirements, the user instructed "do it".
+This authorizes publishing this repository and a tagged preview, executing remote
+Windows/Linux checks, and validating a small openly licensed field sample locally.
+The F3 raw subvolume stays excluded from Git and distributions; publish the oracle,
+attributed source register, fingerprints, policy definitions, and audit results.
+The user has no practitioner reviewer available. Prepare a review packet and retain
+that limitation; automated review must never be presented as practitioner endorsement.

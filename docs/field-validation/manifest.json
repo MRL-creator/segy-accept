@@ -1,0 +1,53 @@
+{
+  "cases": [
+    {
+      "actual": "accepted",
+      "case": "declared-workflow",
+      "expected": "accepted"
+    },
+    {
+      "actual": "rejected",
+      "case": "wrong-sampling",
+      "expected": "rejected"
+    },
+    {
+      "actual": "incomplete",
+      "case": "undeclared-grid",
+      "expected": "incomplete"
+    }
+  ],
+  "license_as_stated": "CC-BY-SA; version not specified in the source README",
+  "license_source": "https://github.com/equinor/segyio-notebooks/blob/c93e02027ea31d699b65be611f2747cc78cc967e/README.md",
+  "limits": "One processed field subvolume; contractual numeric bounds, no EPSG verification or scientific calibration.",
+  "oracle": {
+    "coordinate_unit_code": 1,
+    "crossline_range": [
+      475,
+      675
+    ],
+    "inline_range": [
+      230,
+      430
+    ],
+    "measurement_system": 1,
+    "sample_interval_us": 4000,
+    "samples_per_trace": 51,
+    "scalar": -10,
+    "scaled_xy_extents": [
+      609978.4,
+      615116.1,
+      6076927.2,
+      6082064.9
+    ],
+    "traces": 40401
+  },
+  "raw_data_redistributed": false,
+  "retrieved_at_utc": null,
+  "sha256": "ed50c38db56cbdd1343ca6d06a93e2ed0de2b82946c1cb6756ef9bba207f8573",
+  "size_bytes": 17941644,
+  "source_file": "F3_Dip_steered_median_subvolume_IL230-430_XL475-675_T1600-1800.sgy",
+  "source_reviewed": "2026-10-14",
+  "source_revision": "c93e02027ea31d699b65be611f2747cc78cc967e",
+  "source_url": "https://raw.githubusercontent.com/equinor/segyio-notebooks/c93e02027ea31d699b65be611f2747cc78cc967e/data/basic/F3_Dip_steered_median_subvolume_IL230-430_XL475-675_T1600-1800.sgy",
+  "validated_at_utc": "2026-10-14T10:20:35.816800+00:00"
+}

@@ -15,5 +15,6 @@ dist/
 demo-output/
 benchmark-output*/
 independent-output/
+.field-data/
 .env
 *.pem
