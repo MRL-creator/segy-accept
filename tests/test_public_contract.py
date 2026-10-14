@@ -2,9 +2,9 @@
 
 import hashlib
 import json
-import os
 import subprocess
 import sys
+import sysconfig
 from importlib.metadata import version
 from pathlib import Path
 
@@ -117,8 +117,8 @@ def test_schema_one_is_usable_by_a_json_consumer(corpus, tmp_path, name, status)
 
 def test_installed_console_exposes_version_and_invocation_errors():
     assert version("segy-accept") == __version__
-    command = Path(sys.executable).with_name(
-        "segy-accept.exe" if os.name == "nt" else "segy-accept"
+    command = Path(sysconfig.get_path("scripts")) / (
+        "segy-accept.exe" if sys.platform == "win32" else "segy-accept"
     )
     result = subprocess.run([str(command), "--version"], capture_output=True, text=True, timeout=30)
     assert result.returncode == 0 and result.stdout.strip() == f"segy-accept {__version__}"
