@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import os
 from dataclasses import asdict
 from importlib.metadata import version
 from pathlib import Path
@@ -9,7 +10,7 @@ from pathlib import Path
 import segyio
 
 from . import __version__
-from .reader import MAX_BYTES, AuditInputError, inspect_envelope
+from .reader import MAX_BYTES, AuditInputError, file_signature, inspect_envelope, regular_file_stat
 
 RULES = {
     "format.profile": (
@@ -67,10 +68,27 @@ class Check:
 
 
 def sha256_file(path):
+    """Hash at most the initial size plus a growth probe, refusing unstable inputs."""
+    path = Path(path)
+    initial = regular_file_stat(path)
+    if initial.st_size > MAX_BYTES:
+        raise AuditInputError(f"input exceeds hashing limit of {MAX_BYTES} bytes")
+    signature = file_signature(initial)
     digest = hashlib.sha256()
-    with Path(path).open("rb") as stream:
-        for block in iter(lambda: stream.read(1024 * 1024), b""):
+    with path.open("rb") as stream:
+        if file_signature(os.fstat(stream.fileno())) != signature:
+            raise AuditInputError("input changed before hashing")
+        remaining = initial.st_size
+        while remaining:
+            block = stream.read(min(1024 * 1024, remaining))
+            if not block:
+                raise AuditInputError("input changed during hashing (short read)")
             digest.update(block)
+            remaining -= len(block)
+        if stream.read(1) or file_signature(os.fstat(stream.fileno())) != signature:
+            raise AuditInputError("input changed during hashing")
+    if file_signature(regular_file_stat(path)) != signature:
+        raise AuditInputError("input changed after hashing")
     return digest.hexdigest()
 
 
@@ -154,7 +172,7 @@ def check_grid(seen, cell, index, inlines, crosslines, check):
 def audit(path, policy):
     """Audit every trace header; never infer acceptance for missing policy dimensions."""
     path = Path(path)
-    original_stat = path.stat()
+    original_stat = regular_file_stat(path)
     canonical = {"schema_version": 1, **asdict(policy)}
     policy_bytes = json.dumps(
         canonical, sort_keys=True, separators=(",", ":"), allow_nan=False
@@ -239,18 +257,24 @@ def audit(path, policy):
         for rule, check in checks.items():
             if rule != "format.profile" and check.data["status"] == "pass":
                 check.add("unknown", {"reason": "scan could not be completed"})
-    if original_stat.st_size <= MAX_BYTES:
-        result["input"]["sha256"] = sha256_file(path)
-    final_stat = path.stat()
-    if (original_stat.st_size, original_stat.st_mtime_ns) != (
-        final_stat.st_size,
-        final_stat.st_mtime_ns,
-    ):
+    unstable_reason = None
+    try:
+        if file_signature(regular_file_stat(path)) != file_signature(original_stat):
+            raise AuditInputError("input changed during audit; rerun on a stable file")
+        if original_stat.st_size <= MAX_BYTES:
+            result["input"]["sha256"] = sha256_file(path)
+        if file_signature(regular_file_stat(path)) != file_signature(original_stat):
+            raise AuditInputError("input changed during audit; rerun on a stable file")
+    except (AuditInputError, OSError) as error:
+        unstable_reason = str(error)
+    if unstable_reason is not None:
         result["scan"]["complete"] = False
-        checks["format.profile"].add(
-            "unknown", {"reason": "input changed during audit; rerun on a stable file"}
-        )
+        checks["format.profile"].add("unknown", {"reason": unstable_reason})
+        for rule, check in checks.items():
+            if rule != "format.profile" and check.data["status"] in ["pass", "warning"]:
+                check.add("unknown", {"reason": "input stability could not be established"})
         result["input"]["sha256"] = None
+        result["coordinate_examples"].clear()
     result["findings"] = [check.data for check in checks.values()]
     statuses = {check.data["status"] for check in checks.values()}
     if result["scan"]["complete"]:

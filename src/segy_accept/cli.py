@@ -9,11 +9,13 @@ from pathlib import Path
 
 from .audit import audit
 from .policy import Policy
+from .reader import file_signature, regular_file_stat
 from .report import json_text, render_html
 
 
 def load_policy(path):
-    if Path(path).stat().st_size > 1024 * 1024:
+    initial = regular_file_stat(path)
+    if initial.st_size > 1024 * 1024:
         raise ValueError("policy exceeds the 1 MiB size limit")
 
     def unique_keys(pairs):
@@ -24,8 +26,16 @@ def load_policy(path):
             result[key] = value
         return result
 
-    with Path(path).open(encoding="utf-8") as stream:
-        return Policy.from_dict(json.load(stream, object_pairs_hook=unique_keys))
+    with Path(path).open("rb") as stream:
+        raw = stream.read(1024 * 1024 + 1)
+        opened = os.fstat(stream.fileno())
+    if len(raw) > 1024 * 1024:
+        raise ValueError("policy exceeds the 1 MiB size limit")
+    if file_signature(initial) != file_signature(opened) or file_signature(
+        initial
+    ) != file_signature(regular_file_stat(path)):
+        raise ValueError("policy changed while being read; rerun on a stable file")
+    return Policy.from_dict(json.loads(raw.decode("utf-8"), object_pairs_hook=unique_keys))
 
 
 def save_reports(result, directory, protected, overwrite=False):

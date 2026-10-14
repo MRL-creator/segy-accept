@@ -1,11 +1,23 @@
 """Independent envelope guard, not a general SEG-Y parser."""
 
+import stat
 import struct
 from dataclasses import dataclass
 from pathlib import Path
 
 MAX_TRACES = 1_000_000
 MAX_BYTES = 2 * 1024**3
+
+
+def regular_file_stat(path):
+    info = Path(path).stat()
+    if not stat.S_ISREG(info.st_mode):
+        raise OSError("input must be a regular file")
+    return info
+
+
+def file_signature(info):
+    return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns
 
 
 class AuditInputError(ValueError):
@@ -25,7 +37,7 @@ class Envelope:
 
 def inspect_envelope(path):
     path = Path(path)
-    size = path.stat().st_size
+    size = regular_file_stat(path).st_size
     if size > MAX_BYTES:
         raise AuditInputError(f"input exceeds initial-release limit of {MAX_BYTES} bytes")
     with path.open("rb") as stream:
