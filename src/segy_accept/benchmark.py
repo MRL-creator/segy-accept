@@ -111,6 +111,28 @@ def validate_measurement_options(interval, timeout):
         raise ValueError("timeout must be finite and positive")
 
 
+def stop_process_tree(monitored, observed):
+    """Refresh children at cleanup, including children never sampled before timeout."""
+    import psutil
+
+    tree = dict(observed)
+    if monitored is not None:
+        tree[monitored.pid] = monitored
+    for member in list(tree.values()):
+        try:
+            tree.update((child.pid, child) for child in member.children(recursive=True))
+        except psutil.NoSuchProcess:
+            continue
+    for member in reversed(list(tree.values())):
+        try:
+            member.kill()
+        except psutil.NoSuchProcess:
+            continue
+    _, alive = psutil.wait_procs(list(tree.values()), timeout=5)
+    if alive:
+        raise RuntimeError("benchmark worker processes did not terminate")
+
+
 def measure_process(path, policy_path, interval=0.005, timeout=120):
     """RSS is sampled over child startup + audit; audit timing excludes imports/output."""
     import psutil
@@ -129,6 +151,7 @@ def measure_process(path, policy_path, interval=0.005, timeout=120):
     with tempfile.TemporaryFile() as output, tempfile.TemporaryFile() as errors:
         process = subprocess.Popen(command, stdout=output, stderr=errors)
         observed = {}
+        monitored = None
         try:
             monitored = psutil.Process(process.pid)
             while process.poll() is None:
@@ -168,14 +191,10 @@ def measure_process(path, policy_path, interval=0.005, timeout=120):
             )
             return result
         finally:
+            stop_process_tree(monitored, observed)
             if process.poll() is None:
-                for member in reversed(list(observed.values())):
-                    try:
-                        member.kill()
-                    except psutil.NoSuchProcess:
-                        continue
                 process.kill()
-                process.wait()
+            process.wait(timeout=5)
 
 
 def summarize(runs):

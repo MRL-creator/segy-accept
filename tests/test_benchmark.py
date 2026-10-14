@@ -11,6 +11,7 @@ from segy_accept.benchmark import (
     measure_process,
     run_suite,
     summarize,
+    stop_process_tree,
 )
 from segy_accept.cli import load_policy
 
@@ -119,3 +120,33 @@ def test_untracked_installed_source_does_not_claim_enclosing_repository(tmp_path
         subprocess, "run", lambda command, **kwargs: subprocess.CompletedProcess(command, 1, "", "")
     )
     assert git_metadata(tmp_path) == (None, None)
+
+
+def test_timeout_cleanup_discovers_unsampled_child_and_cleans_orphans(monkeypatch):
+    import psutil
+
+    killed = []
+
+    class Process:
+        def __init__(self, pid, children=()):
+            self.pid, self.descendants = pid, children
+
+        def children(self, recursive):
+            return self.descendants
+
+        def kill(self):
+            killed.append(self.pid)
+
+    child = Process(2)
+    root = Process(1, [child])
+    monkeypatch.setattr(psutil, "wait_procs", lambda processes, timeout: (processes, []))
+    stop_process_tree(root, {})
+    assert killed == [2, 1]
+    killed.clear()
+    stop_process_tree(None, {child.pid: child})
+    assert killed == [2]
+
+
+def test_worker_timeout_is_reported(tmp_path):
+    with pytest.raises(TimeoutError, match="exceeded its timeout"):
+        measure_process(tmp_path / "missing.sgy", tmp_path / "missing.json", timeout=0.000001)
