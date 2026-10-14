@@ -35,7 +35,11 @@ def load_policy(path):
         initial
     ) != file_signature(regular_file_stat(path)):
         raise ValueError("policy changed while being read; rerun on a stable file")
-    return Policy.from_dict(json.loads(raw.decode("utf-8"), object_pairs_hook=unique_keys))
+    try:
+        definition = json.loads(raw.decode("utf-8"), object_pairs_hook=unique_keys)
+    except RecursionError as error:
+        raise ValueError("policy JSON nesting exceeds the decoder's supported depth") from error
+    return Policy.from_dict(definition)
 
 
 def save_reports(result, directory, protected, overwrite=False):

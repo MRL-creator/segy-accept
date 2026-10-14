@@ -135,10 +135,11 @@ def test_overwrite_cannot_truncate_a_hardlinked_source(write_segy, tmp_path, pol
     assert path.read_bytes() == original
 
 
-def test_deeply_nested_json_is_an_invalid_policy(write_segy, tmp_path):
+@pytest.mark.parametrize("depth", [1200, 20000])
+def test_deeply_nested_json_is_an_invalid_policy(write_segy, tmp_path, depth):
     path = write_segy()
     policy = tmp_path / "policy.json"
-    policy.write_text("[" * 1200 + "0" + "]" * 1200)
+    policy.write_text("[" * depth + "0" + "]" * depth)
     assert main(["audit", str(path), "--policy", str(policy), "--out", str(tmp_path / "out")]) == 3
 
 
