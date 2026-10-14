@@ -72,3 +72,12 @@ Always validate policy and file bounds, preserve source bytes, run relevant test
 and explain partial knowledge. Ask before field-data redistribution, external publication,
 or scope expansion. Never commit credentials, weaken failing checks, or imply full SEG-Y compliance.
 No blocking product questions remain for this local first version.
+
+## Evidence expansion (14 October 2026)
+The user authorized continuing improvements. Add developer-only independent
+ObsPy writer validation and isolated-process runtime/RSS measurements from the
+report's roadmap. These do not widen the supported SEG-Y profile. Generated data
+remain synthetic and locally owned; no third-party field data are redistributed.
+Benchmark output records all repeats, sampling interval, environment, workload,
+source revision, and timing scope. Generation and reporting are outside the timed
+audit. Performance measurements are descriptive, not noisy CI timing gates.

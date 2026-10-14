@@ -13,5 +13,7 @@ build/
 dist/
 *.egg-info/
 demo-output/
+benchmark-output*/
+independent-output/
 .env
 *.pem
