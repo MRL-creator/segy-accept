@@ -1,13 +1,14 @@
-# Local verification
+# Verification evidence
 
 Verified locally on **14 October 2026**, Windows, Python 3.12.14,
 segyio 1.9.14 and NumPy 2.5.4.
 
-Current snapshot: **106 tests pass**, with **90% statement coverage** across the
-core auditor and optional developer experiments (701 statements, 69 not covered).
+Current local snapshot: **108 tests pass**, with **90% statement coverage** across the
+core auditor and optional developer experiments (705 statements, 69 not covered).
 Ruff checks and formatting pass; wheel and source-distribution builds succeed.
 The dependency audit includes the newly installed ObsPy/psutil stack and reports
-no known vulnerabilities. These checks ran on Windows/Python 3.12 only.
+no known vulnerabilities locally. The published quality workflow checks Linux/Python
+3.10 and 3.12 plus Windows/Python 3.12; see [release evidence](release-readiness.md).
 The updated wheel's seven-case demo also runs from outside the source directory
 in a separate environment with neither ObsPy nor psutil installed.
 
@@ -63,15 +64,23 @@ No test was skipped or weakened to work around that environment.
 
 ## Remaining evidence to collect
 
-The GitHub Actions workflow is prepared but has not run remotely. Linux and other
-Python versions remain unverified locally. The test fixtures do not represent
+Remote quality checks and an opt-in Windows/Linux field experiment are published.
+The test fixtures and single processed field subvolume do not represent
 all producer variants, real survey semantics, or an independently certified SEG-Y writer.
 
-No field-data study has been performed. The resource guards are ceilings, not
-measured supported capacities. Future work: obtain a legally usable field sample,
-collect user feedback, and evaluate a focused upstream contribution.
+The [F3 field experiment](field-validation/README.md) verifies 40,401 real trace
+headers with an independent stdlib oracle and three contrasting workflow policies.
+The resource guards remain ceilings, not measured supported capacities. Future
+work: broader producer samples, practitioner feedback, and a focused upstream contribution.
 These follow the career report's roadmap; they are not required to try this working
 local first version.
+
+Remote testing exposed a deeply nested JSON crash on Python 3.10. The decoder's
+recursion error is now translated into an invalid-policy outcome, with a deeper
+regression reproduced locally. The audit also caught the runner's old setuptools;
+CI upgrades it and package builds require version 83 or newer. No dependency finding
+was ignored. Field validation uses explicit error checks so Python optimization
+cannot disable its oracle, fingerprint, outcome, or immutability checks.
 
 ## Independent writer experiment
 

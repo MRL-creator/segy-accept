@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased - local improvements, 14 October 2026
+## 0.1.0 — initial preview, 14 October 2026
 
 - Actionable terminal summaries with prioritized findings, reasons, remedies, and report paths.
 - Regular-file guards and bounded policy/hash reads that cannot follow a growing file indefinitely.
@@ -10,16 +10,19 @@
   sampled process-tree RSS, timeout cleanup, and a documented synthetic baseline.
 - Regression coverage for benchmark validation, provenance, worker failures, and cleanup.
 - Runtime auditing still requires only segyio and its dependencies.
+- A pinned processed F3 field subvolume verified against an independent byte-level oracle.
+- Windows/Linux quality workflows with clean-wheel checks, dependency audits,
+  and an opt-in real-data workflow. 108 tests pass locally.
+- Python 3.10 JSON nesting recovery and patched build-tool requirements.
+- Security guidance, contribution instructions, and a practitioner review packet.
 
-## 0.1.0 - local first version, 14 October 2026
-
-### Added
+### Core functionality
 - Read-only SEG-Y header acceptance against explicit sampling, coordinate and grid policies.
 - Bounded explanatory findings, SHA-256 provenance, and offline JSON/HTML reports.
 - Seven generated fixtures and an independently specified expected-results corpus.
 - CLI exit codes separating acceptance, rejection, incomplete knowledge, and invocation errors.
-- Regression tests, installable wheel, source distribution, and prepared CI workflow.
+- Regression tests, installable wheel, source distribution, and automated CI workflow.
 
-This version is local and has not been published to GitHub or PyPI. Field validation
-and expanded format support remain future work. Initial performance evidence appears
-in the unreleased improvements above.
+This preview is published on GitHub with wheel/source assets; it is not published
+to PyPI. Raw field data are not bundled. Broader producer validation, practitioner
+review, and expanded format support remain future work.

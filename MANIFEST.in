@@ -1,3 +1,4 @@
-include SPEC.md CONSTRAINTS.md
+include SPEC.md CONSTRAINTS.md CHANGELOG.md CONTRIBUTING.md SECURITY.md
+recursive-include tools *.py
 recursive-include docs *.md *.png *.json
 recursive-include examples *.json *.html *.sgy

@@ -2,6 +2,12 @@
 
 **Explain whether a SEG-Y dataset meets a declared receiving workflow.**
 
+[![Quality](https://github.com/MRL-creator/segy-accept/actions/workflows/ci.yml/badge.svg)](https://github.com/MRL-creator/segy-accept/actions/workflows/ci.yml)
+
+**v0.1.0 preview:** a small, tested tool for the explicit profile below. One
+processed field subvolume is validated; broader producer coverage and practitioner
+feedback remain pending. See [release evidence and known limits](docs/release-readiness.md).
+
 A file can open successfully while its sampling headers disagree or its post-stack
 grid contains duplicate and missing cells. This read-only auditor turns those
 contradictions into reproducible JSON findings and a self-contained HTML report.
@@ -15,14 +21,15 @@ Sampling count and interval use the revision-1 positive signed 16-bit range,
 
 ## Try the synthetic demonstration
 
-Use Python 3.12 (verified locally on Windows). Python 3.10+ is declared in the
-package; the included CI matrix is prepared, but has not run on GitHub yet.
+Use Python 3.10+ in a virtual environment. Windows/Python 3.12 is verified locally;
+the [CI matrix](https://github.com/MRL-creator/segy-accept/actions/workflows/ci.yml)
+checks Linux/Python 3.10 and 3.12 plus Windows/Python 3.12.
 
 ```sh
 python -m venv .venv
 # Activate the environment: .venv\Scripts\Activate.ps1 on Windows,
 # or source .venv/bin/activate on macOS/Linux.
-python -m pip install -e .
+python -m pip install "https://github.com/MRL-creator/segy-accept/releases/download/v0.1.0/segy_accept-0.1.0-py3-none-any.whl"
 python -m segy_accept demo demo-output
 ```
 
@@ -133,8 +140,9 @@ python -m build
 
 [Rules](docs/rules.md) explain each check. [Validation](docs/validation.md)
 describes the independent byte-level fixtures, tested environment, and remaining
-work. `.github/workflows/ci.yml` is ready for a repository push; no remote
-repository has been created by this implementation.
+work. The [field-data experiment](docs/field-validation/README.md) compares
+40,401 real traces against an independent byte-level oracle and three receiving
+policies. [Contributing](CONTRIBUTING.md) explains source installation and checks.
 
 ### Independent writer and performance experiments
 
